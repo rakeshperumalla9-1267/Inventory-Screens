@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eConnect | Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+
+  <link rel="stylesheet" href="../common.css" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+  <div id="sidebar-placeholder"></div>
+  <div id="header-placeholder"></div>
+
+  <main id="main-wrapper">
+    <div class="sticky-header px-3 py-2 mb-2">
+      <div class="d-flex align-items-center justify-content-between">
+
+        <!-- LEFT: Back + Title -->
+        <div class="d-flex align-items-start gap-3">
+
+          <!-- Back Button -->
+          <a class="btn btn-light back-btn" href="a1.html"
+            title="Back to Inventory Inward List">
+            <i class="bi bi-arrow-left"></i>
+          </a>
+
+          <!-- Title + Description -->
+          <div>
+            <h6 class="fw-bold mb-1">Inventory Inward Details</h6>
+            <p class="navp mb-0">
+              Manage material receipts, record inward entries, and track stock availability for warehouse operations.
+            </p>
+          </div>
+
+
+        </div>
+
+        <div class="d-flex gap-3">
+          <button class="btn btn-light px-4">
+            <i class="bi bi-save me-2"></i>Save as Draft
+          </button>
+          <button class="btn btn-premium px-4">
+            <i class="bi bi-check-circle me-2"></i>Submit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dcard">
+      <div class="wo-content">
+        <div class="sticky-tabs-container pt-0">
+          <!-- MAIN TABS -->
+          <ul class="nav nav-tabs mb-2 custom-tabs">
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#details" title="Details">
+                <i class="fas fa-clipboard-list"></i>
+                <span class="tab-label">Details</span>
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="pill" data-bs-target="#files" title="Attachments">
+                <i class="fa-solid fa-paperclip"></i>
+                <span class="tab-label">Attachments</span>
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#approvers" title="Approvers">
+                <i class="fa fa-users"></i>
+                <span class="tab-label">Approvers</span>
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#audit" title="Audit Log">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span class="tab-label">Audit Log</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="tab-content">
+          <!-- REQUEST -->
+          <div class="tab-pane fade show active" id="details">
+            <div class="tab-scroll">
+              <div class="mt-3">
+                <div class="section-title">INVENTORY INWARD INFORMATION</div>
+
+                <!-- Row 1 -->
+                <div class="row info-row">
+                  <div class="col-md-3 label">Inward ID</div>
+                  <div class="col-md-3 value">INV005868</div>
+                  <div class="col-md-3 label">Approval Status</div>
+                  <div class="col-md-3 value">
+                    <span class="badge badge-custom badge-pending">Pending</span>
+                  </div>
+                </div>
+
+
+                <div class="row info-row">
+                  <div class="col-md-3 label">GI No.</div>
+                  <div class="col-md-3 value">GI00250037</div>
+                  <div class="col-md-3 label">Gate No.</div>
+                  <div class="col-md-3 value">
+                    1
+                  </div>
+                </div>
+
+                <div class="row info-row">
+                  <div class="col-md-3 label">Financial Year</div>
+                  <div class="col-md-3 value">2025-26</div>
+                  <div class="col-md-3 label">GI Type</div>
+                  <div class="col-md-3 value">
+                    With PO
+                  </div>
+                </div>
+
+                <div class="row info-row">
+                  <div class="col-md-3 label">PO Number</div>
+                  <div class="col-md-3 value">3030013647</div>
+                  <div class="col-md-3 label">Delivery Mode</div>
+                  <div class="col-md-3 value">
+                    Vehicle
+                  </div>
+                </div>
+
+
+                <!-- <div class="row info-row">
+                  <div class="col-md-3 label">Invoice Number</div>
+                  <div class="col-md-3 value">INV-MLG-2026-0001</div>
+                  <div class="col-md-3 label">Invoice Date</div>
+                  <div class="col-md-3 value">03/03/2026</div>
+                </div> -->
+
+                <!-- <div class="row info-row">
+                  <div class="col-md-3 label">Supplier Name</div>
+                  <div class="col-md-3 value">Global Pharma Solutions</div>
+                  <div class="col-md-3 label">Supplier Place</div>
+                  <div class="col-md-3 value">Hosur</div>
+                </div> -->
+
+                <!-- Row 2  -->
+                <!-- <div class="row info-row">
+                  <div class="col-md-3 label">Created By</div>
+                  <div class="col-md-3 value">Stores Executor (000037)</div>
+                  <div class="col-md-3 label">Created On</div>
+                  <div class="col-md-3 value">14-Apr-2025, 12:13 PM</div>
+                </div> -->
+
+
+              </div>
+
+              <div class="table-responsive mt-2">
+                <table class="table align-middle">
+                  <thead>
+                    <tr>
+                      <th class="text-center nowrap-column">Action</th>
+                      <th class="nowrap-column">S.No</th>
+                      <th class="nowrap-column">Material Code</th>
+                      <th class="nowrap-column">Type</th>
+                      <th class="description-column">Description</th>
+                      <th class="nowrap-column">UOM</th>
+                      <th class="text-end nowrap-column" style="padding-right: 25px;">Quantity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="master-row" data-bs-toggle="collapse" data-bs-target="#detailsRow1"
+                      aria-expanded="false">
+                      <td class="text-center">
+                        <button class="btn btn-edit-action" data-bs-toggle="modal" data-bs-target="#allocationModal1">
+                          <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip" title="Edit Allocation"
+                            data-bs-target="#allocationModal1"></i>
+                        </button>
+                      </td>
+                      <td><span class="text-muted">01</span></td>
+                      <td><span class="fw-bold text-dark">LC00000113</span></td>
+                      <td><span class="badge bg-light text-dark border">LC</span></td>
+                      <td class="description-column">
+                        LITHIUM CLAVULANATE EPCRS-125 95.00
+                      </td>
+                      <td>NO</td>
+                      <td class="text-end" style="padding-right: 25px;">
+                        <span class="fw-bold fs-6">10</span>
+                      </td>
+                    </tr>
+
+
+                    <tr class="master-row">
+                      <td class="text-center">
+                        <button class="btn btn-edit-action" data-bs-toggle="modal" data-bs-target="#allocationModal1">
+                          <i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip" title="Edit Allocation"
+                            data-bs-target="#allocationModal1"></i>
+                        </button>
+                      </td>
+                      <td><span class="text-muted">02</span></td>
+                      <td><span class="fw-bold text-dark">LC00000823</span></td>
+                      <td><span class="badge bg-light text-dark border">LC</span></td>
+                      <td class="description-column">TTITANIUM DIOXIDE -100G 70.00</td>
+                      <td>NO</td>
+                      <td class="text-end" style="padding-right: 25px;">
+                        <span class="fw-bold fs-6">10</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="files">
+            <div class="tab-scroll">
+              <div class="card-body">
+                <div class="row g-2 align-items-end">
+                  <!-- Attachment Type -->
+                  <div class="col-lg-3 col-md-6">
+                    <label class="form-label small text-muted">Attachment Type</label>
+                    <select class="form-select">
+                      <option selected disabled>Select type</option>
+                      <option>📄 Document</option>
+                      <option>🖼️ Image</option>
+                      <option>🔗 URL</option>
+                    </select>
+                  </div>
+
+                  <!-- Description -->
+                  <div class="col-lg-3 col-md-6">
+                    <label class="form-label small text-muted">Description</label>
+                    <input type="text" class="form-control" placeholder="Max 100 characters" />
+                  </div>
+
+                  <!-- File / URL -->
+                  <div class="col-lg-5 col-md-8">
+                    <label class="form-label small text-muted">File / URL</label>
+                    <input type="file" class="form-control" />
+                  </div>
+
+                  <!-- Add Button -->
+                  <div class="col-lg-1 col-md-4 text-end">
+                    <button class="btn btn-premium btn-sm w-100">
+                      <i class="bi bi-plus-circle"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <small class="text-muted d-block mt-2">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Maximum total upload size: 25 MB
+                </small>
+
+                <div class="table-responsive mt-3">
+                  <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                      <tr>
+                        <th width="20%">Type</th>
+                        <th width="25%">Description</th>
+                        <th width="35%">File / URL</th>
+                        <th width="10%">Size</th>
+                        <th width="10%" class="text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Document -->
+                      <tr>
+                        <td>
+                          <i class="bi bi-file-earmark-text text-primary"></i>
+                          Document
+                        </td>
+                        <td class="text-truncate" title="Maintenance SOP document">
+                          Maintenance SOP document
+                        </td>
+                        <td>
+                          <a href="#" class="text-decoration-none">
+                            <i class="bi bi-file-earmark-pdf text-danger me-1"></i>
+                            SOP_Maintenance.pdf
+                          </a>
+                        </td>
+                        <td class="text-center">1.2 MB</td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <!-- Image -->
+                      <tr>
+                        <td>
+                          <i class="bi bi-image text-success"></i> Image
+                        </td>
+                        <td>Equipment condition photo</td>
+                        <td>
+                          <a href="#">
+                            <i class="bi bi-image me-1"></i>
+                            motor_photo.jpg
+                          </a>
+                        </td>
+                        <td class="text-center">450 KB</td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+
+                      <!-- URL -->
+                      <tr>
+                        <td>
+                          <i class="bi bi-link-45deg text-secondary"></i>
+                          URL
+                        </td>
+                        <td>External safety SOP</td>
+                        <td>
+                          <a href="https://example.com" target="_blank" class="text-decoration-none">
+                            <i class="bi bi-box-arrow-up-right me-1"></i>
+                            https://example.com
+                          </a>
+                        </td>
+                        <td class="text-center">NA</td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="approvers">
+            <table class="table table-sm">
+              <tr>
+                <th>Approval Level</th>
+                <th>Department</th>
+                <th>Team Name</th>
+                <th>Team Member</th>
+              </tr>
+
+              <tr>
+                <td>1</td>
+                <td>Engineering</td>
+                <td>Engineering Review Team</td>
+                <td>Vikram (000007)</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="tab-pane fade" id="audit">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th rowspan="2" style="width: 10%">Action</th>
+                  <th rowspan="2" style="width: 10%; cursor: pointer">
+                    Done By
+                  </th>
+                  <th rowspan="2" style="width: 10%; cursor: pointer">
+                    Date & Time
+                  </th>
+                  <th colspan="3" class="bg-secondary text-white" style="width: 50%">
+                    Changes
+                  </th>
+                  <th rowspan="2" style="width: 10%">Reason</th>
+                  <th rowspan="2" style="width: 10%">Status</th>
+                </tr>
+                <tr class="table-secondary">
+                  <th style="width: 10%">Field</th>
+                  <th style="width: 15%">Old Value</th>
+                  <th style="width: 25%">New Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Example Row with Changes -->
+                <tr>
+                  <td rowspan="2">Update</td>
+                  <td rowspan="2">John Doe</td>
+                  <td rowspan="2">2025-12-27 10:00 AM</td>
+                  <td>Username</td>
+                  <td>OldUser</td>
+                  <td>NewUser</td>
+                  <td rowspan="2">Corrected typo</td>
+                  <td rowspan="2">
+                    <span class="badge-status approved">
+                      <i class="bi bi-check-circle"></i> Approved
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>old@example.com</td>
+                  <td>new@example.com</td>
+                </tr>
+
+                <!-- Example Row with No Changes -->
+                <tr>
+                  <td>Created</td>
+                  <td>Jane Smith</td>
+                  <td>2025-12-26 09:30 AM</td>
+                  <td>NA</td>
+                  <td>NA</td>
+                  <td>NA</td>
+                  <td>Initial creation</td>
+                  <td>
+                    <span class="badge-status pending">
+                      <i class="bi bi-hourglass-split"></i> Pending
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </main>
+
+  <div class="modal fade" id="allocationModal1" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title modal-title fw-bold"><i class="bi bi-box-seam me-2"></i> Item Allocation - LC00000113
+          </h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="row mt-3">
+            <div class="col-md-12">
+              <div class="mb-4 p-2 bg-light border rounded">
+                <div class="row">
+
+
+                  <div class="col-md-4">
+                    <label class="form-label extra-small fw-bold">Material / Item Code Change (If
+                      required)</label>
+                    <div class="input-group mb-2">
+                      <input type="text" class="form-control fw-bold border-primary" value="LC00000113" />
+                      <button class="btn btn-dark" title="Change/Assign Code">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                    </div>
+                    <!-- <span class="extra-small"
+                    >Change if PO inward, Assign if Petty Cash/Non-PO.</span
+                  > -->
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Allocation Mode</label>
+                    <select class="form-select form-select-brand fw-bold" onchange="toggleSections(this.value)"
+                      id="allocationSelector">
+                      <option value="dept" selected>Department Wise</option>
+                      <option value="batch">Batch Wise</option>
+                      <option value="both">Both</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- <div class="text-end">
+                  <div class="small text-muted">Total Received</div>
+                  <h6 class="fw-bold m-0 text-dark">250.00 Units</h6>
+                </div> -->
+              </div>
+
+              <div id="section-dept" class="allocation-section">
+                <div class="">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="section-header">
+                      <i class="bi bi-people-fill"></i> User & Department
+                      Allocation
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+                      <i class="bi bi-plus-lg me-1"></i> New Split
+                    </button>
+                  </div>
+                  <table class="table table-split">
+                    <thead>
+                      <tr>
+                        <th>Department</th>
+                        <!-- <th>Select User</th> -->
+                        <th width="120">Qty Split</th>
+                        <th width="50"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <select class="form-select form-select-sm">
+                            <option>Engineering</option>
+                            <option>Stores</option>
+                          </select>
+                        </td>
+                        <!-- <td>
+                          <select class="form-select form-select-sm">
+                            <option>Rahul Bajaj (Emp-101)</option>
+                            <option>Anika Singh (Emp-105)</option>
+                          </select>
+                        </td> -->
+
+                        <td>
+                          <input type="number" class="form-control form-control-sm qty-split-input" value="5" />
+                        </td>
+                        <td class="text-end">
+                          <i class="bi bi-trash3 text-danger cursor-pointer"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div id="section-batch" class="allocation-section" style="display: none">
+                <div class="">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="section-header">
+                      <i class="bi bi-layers-half"></i> Batch Details Allocation
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+                      <i class="bi bi-plus-lg me-1"></i> New Batch
+                    </button>
+                  </div>
+                  <table class="table table-split">
+                    <thead>
+                      <tr>
+                        <th>Batch Number</th>
+                        <th>MFG Date</th>
+                        <th>Expiry Date</th>
+                        <th width="120">Qty Split</th>
+                        <th width="50"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input type="text" class="form-control form-control-sm" value="BATCH-APR-001" />
+                        </td>
+                        <td>
+                          <input type="date" class="form-control form-control-sm" />
+                        </td>
+                        <td>
+                          <input type="date" class="form-control form-control-sm" />
+                        </td>
+                        <td>
+                          <input type="number" class="form-control form-control-sm qty-split-input" value="5" />
+                        </td>
+                        <td class="text-end">
+                          <i class="bi bi-trash3 text-danger cursor-pointer"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div id="section-both" class="allocation-section" style="display: none">
+                <div class="">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="section-header">
+                      <i class="bi bi-boxes"></i> Item Details Allocation
+                    </h6>
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+                      <i class="bi bi-plus-lg me-1"></i> New Item
+                    </button>
+                  </div>
+                  <table class="table table-split">
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Batch</th>
+                        <th>Department</th>
+                        <!-- <th>User</th> -->
+                        <th width="120">Qty Split</th>
+                        <th width="50"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input type="text"
+                                class="form-control form-control-sm"
+                                value="LC00000113"
+                                disabled />
+                      </td>
+                        <td>
+                          <input type="text" class="form-control form-control-sm" value="BATCH-APR-001" />
+                        </td>
+
+                        <td>
+                          <select class="form-select form-select-sm">
+                            <option>Engineering</option>
+                            <option>Stores</option>
+                          </select>
+                        </td>
+                        <!-- <td>
+                          <select class="form-select form-select-sm">
+                            <option>Rahul Bajaj (Emp-101)</option>
+                            <option>Anika Singh (Emp-105)</option>
+                          </select>
+                        </td> -->
+                        <td>
+                          <input type="number" class="form-control form-control-sm qty-split-input" value="5" />
+                        </td>
+                        <td class="text-end">
+                          <i class="bi bi-trash3 text-danger cursor-pointer"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="col-md-3 id-sidebar">
+              <h6
+                class="section-header"
+                style="display: flex; justify-content: flex-start"
+              >
+                <i class="bi bi-search"></i> QR CODE
+              </h6>
+
+              <div class="">
+                <label class="form-label small fw-bold text-muted"
+                  >Inward Type</label
+                >
+                <input
+                  type="text"
+                  class="form-control fw-bold border-0 bg-light"
+                  value="With PO"
+                  readonly
+                />
+              </div>
+              <div class="">
+                <label class="form-label small fw-bold text-muted"
+                  >Item Code</label
+                >
+                <input
+                  type="text"
+                  class="form-control fw-bold border-0 bg-light"
+                  value="6546546546"
+                  readonly
+                />
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label extra-small fw-bold"
+                  >Item Code Change (If required)</label
+                >
+                <div class="input-group mb-2">
+                  <input
+                    type="text"
+                    class="form-control fw-bold border-primary"
+                    value="MAT-8802"
+                  />
+                  <button class="btn btn-dark" title="Change/Assign Code">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </div>
+                <span class="extra-small"
+                  >Change if PO inward, Assign if Petty Cash/Non-PO.</span
+                >
+              </div>
+
+              <div class="qr-vault p-3 bg-white rounded-4 border">
+                <div class="text-center mb-2">
+                  <i class="bi bi-qr-code fs-1"></i>
+                </div>
+                <button class="qr-action-btn">
+                  <i class="bi bi-printer me-2"></i>Print New QR
+                </button>
+                <button class="qr-action-btn">
+                  <i class="bi bi-camera me-2"></i>Capture Existing
+                </button>
+                <button class="qr-action-btn btn-premium">
+                  <i class="bi bi-plus-circle me-2"></i>Generate New
+                </button>
+              </div>
+            </div> -->
+          </div>
+        </div>
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-premium px-4">Allocate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../sidebar.js"></script>
+  <script src="../header.js"></script>
+
+  <script>
+    function toggleSections(mode) {
+      // List of all section IDs
+      const sections = ["section-dept", "section-batch", "section-both"];
+
+      sections.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) {
+          if (id === "section-" + mode) {
+            element.style.display = "block";
+          } else {
+            element.style.display = "none";
+          }
+        }
+      });
+    }
+  </script>
+
+  <script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  </script>
+</body>
+
+</html>

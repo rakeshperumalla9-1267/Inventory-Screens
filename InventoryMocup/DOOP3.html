@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eConnect ERP | Elite Nexus V7.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --sidebar-w: 260px;
+            --primary-hex: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --surface-100: #ffffff;
+            --surface-200: #f8fafc;
+            --surface-300: #f1f5f9;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-light: #f1f5f9;
+            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Modern Glass Sidebar */
+        #sidebar {
+            width: var(--sidebar-w);
+            height: 100vh;
+            position: fixed;
+            background: #0f172a;
+            z-index: 2000;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-item-elite {
+            color: #94a3b8;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin: 4px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+        }
+
+        .nav-item-elite:hover { background: rgba(255,255,255,0.08); color: #fff; transform: translateX(4px); }
+        .nav-item-elite.active { background: var(--primary-gradient); color: #fff; box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4); }
+
+        #main-wrapper {
+            margin-left: var(--sidebar-w);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-header { background: #fff; border-bottom: 1px solid var(--border-light); padding: 0.75rem 1.5rem; }
+        
+        /* Command Bar Upgrade */
+        .command-bar { 
+            background: var(--surface-200); 
+            border: 1px solid var(--border-light); 
+            border-radius: 10px; 
+            padding: 6px 14px; 
+            display: flex; 
+            align-items: center; 
+            width: 400px;
+            transition: all 0.2s;
+        }
+        .command-bar:focus-within { background: #fff; border-color: var(--primary-hex); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        .command-input { background: transparent; border: none; outline: none; width: 100%; font-size: 0.8rem; padding-left: 10px; }
+
+        /* Data Container Container */
+        .content-body { padding: 1.5rem; flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+        .data-card { background: #fff; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--card-shadow); flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .data-container { flex: 1; overflow: auto; }
+        
+        /* Premium Table Layout */
+        .table-elite-v6 { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .table-elite-v6 thead th {
+            position: sticky; top: 0;
+            background: #fff;
+            padding: 14px 1rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--surface-200);
+            z-index: 10;
+        }
+        .table-elite-v6 td { padding: 12px 1rem; border-bottom: 1px solid var(--surface-200); vertical-align: middle; }
+        .table-elite-v6 tbody tr { transition: background 0.2s; }
+        .table-elite-v6 tbody tr:hover { background: #f8fafc; }
+
+        .sort-indicator { font-size: 0.6rem; opacity: 0.3; transition: 0.2s; }
+        th:hover .sort-indicator { opacity: 1; color: var(--primary-hex); }
+
+        /* Status & Progress Enhancements */
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .status-released { background: #ecfdf5; color: #059669; }
+        .status-pending { background: #fffbeb; color: #d97706; }
+
+        .progress-micro { height: 6px; width: 80px; background: var(--surface-300); border-radius: 10px; overflow: hidden; }
+
+        .btn-action { 
+            height: 38px; padding: 0 16px; border-radius: 10px; 
+            font-weight: 600; font-size: 0.75rem; 
+            display: flex; align-items: center; gap: 8px; transition: 0.2s;
+        }
+        .btn-primary-elite { background: var(--primary-gradient); border: none; color: #fff; }
+        .btn-primary-elite:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+
+        /* Modern Pagination */
+        .pagination-container { padding: 12px 1.5rem; background: #fff; border-top: 1px solid var(--border-light); }
+        .page-link { border-radius: 8px !important; margin: 0 3px; border: none; color: var(--text-main); font-weight: 600; }
+        .page-item.active .page-link { background: var(--primary-hex); }
+
+        code.sap-ref { background: #f1f5f9; color: #475569; padding: 4px 8px; border-radius: 6px; font-weight: 600; border: 1px solid #e2e8f0; }
+    </style>
+</head>
+<body>
+
+    <aside id="sidebar">
+        <div class="p-4 mb-2">
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-primary p-2 rounded-3 shadow-sm" style="background: var(--primary-gradient) !important;">
+                    <i class="bi bi-intersect text-white fs-5"></i>
+                </div>
+                <h4 class="text-white mb-0 fw-800" style="letter-spacing: -1px;">NEXUS<span style="color:var(--primary-hex)">.</span></h4>
+            </div>
+        </div>
+        <nav>
+            <a href="#" class="nav-item-elite"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <a href="#" class="nav-item-elite active"><i class="bi bi-receipt"></i> Procurement</a>
+            <a href="#" class="nav-item-elite"><i class="bi bi-stack"></i> Inventory</a>
+            <a href="#" class="nav-item-elite"><i class="bi bi-shield-check"></i> Governance</a>
+        </nav>
+    </aside>
+
+    <div id="main-wrapper">
+        <header class="app-header d-flex align-items-center justify-content-between">
+            <div class="command-bar">
+                <i class="bi bi-search text-muted"></i>
+                <input type="text" class="command-input" placeholder="Search anything (Press /)..." id="globalSearch">
+            </div>
+            <div class="d-flex align-items-center gap-4">
+                <div class="d-flex align-items-center gap-2 text-success">
+                    <span class="p-1 bg-success rounded-circle"></span>
+                    <small class="fw-bold">SAP CLOUD ACTIVE</small>
+                </div>
+                <div class="vr"></div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-end">
+                        <div class="fw-bold small">Admin User</div>
+                        <div class="text-muted" style="font-size: 0.6rem;">Procurement Lead</div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=AU&background=6366f1&color=fff" class="rounded-3" width="35">
+                </div>
+            </div>
+        </header>
+
+        <main class="content-body">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1">
+                            <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">ERP</a></li>
+                            <li class="breadcrumb-item active">Requisitions</li>
+                        </ol>
+                    </nav>
+                    <h3 class="fw-800 mb-0">Purchase Requisitions</h3>
+                </div>
+                
+                <div class="d-flex gap-2">
+                    <button class="btn btn-action btn-light border" onclick="toggleFilters()">
+                        <i class="bi bi-funnel"></i> Filters
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-action btn-light border dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-download"></i> Export
+                        </button>
+                        <ul class="dropdown-menu shadow-lg border-0">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-excel me-2"></i>Excel (.xlsx)</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-pdf me-2"></i>PDF Report</a></li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-action btn-primary-elite">
+                        <i class="bi bi-plus-lg"></i> Create New PR
+                    </button>
+                </div>
+            </div>
+
+            <div class="data-card">
+                <div id="filterDrawer" class="p-3 bg-light border-bottom" style="display:none;">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="small fw-bold text-muted mb-1">Search ID</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="e.g. 5001">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="small fw-bold text-muted mb-1">Department</label>
+                            <select class="form-select form-select-sm"><option>All Departments</option></select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button class="btn btn-sm btn-dark w-100">Apply Filters</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-container">
+                    <table class="table-elite-v6" id="nexusTable">
+                        <thead>
+                            <tr>
+                                <th width="40"><input type="checkbox" class="form-check-input"></th>
+                                <th onclick="handleSort('ref')" style="cursor:pointer">ID <i class="bi bi-caret-down-fill sort-indicator"></i></th>
+                                <th onclick="handleSort('item')" style="cursor:pointer">Description <i class="bi bi-caret-down-fill sort-indicator"></i></th>
+                                <th onclick="handleSort('qty')" style="cursor:pointer">Qty <i class="bi bi-caret-down-fill sort-indicator"></i></th>
+                                <th onclick="handleSort('val')" style="cursor:pointer">Valuation <i class="bi bi-caret-down-fill sort-indicator"></i></th>
+                                <th onclick="handleSort('user')" style="cursor:pointer">Requestor <i class="bi bi-caret-down-fill sort-indicator"></i></th>
+                                <th>Workflow</th>
+                                <th>SAP Link</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-container d-flex align-items-center justify-content-between">
+                    <div class="text-muted small fw-500" id="tableInfo">Showing entries...</div>
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0" id="paginationControls"></ul>
+                    </nav>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let fullData = [];
+        let filteredData = [];
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let currentSort = { key: 'ref', asc: true };
+
+        function generateData() {
+            for (let i = 1; i <= 85; i++) {
+                fullData.push({
+                    ref: 5000 + i,
+                    item: `Industrial Turbine Component X-${i}`,
+                    category: 'Hardware • Maintenance',
+                    qty: Math.floor(Math.random() * 100) + 1,
+                    val: (i * 15400),
+                    user: i % 2 === 0 ? 'S. Sharma' : 'J. Doe',
+                    dept: i % 2 === 0 ? 'ENG' : 'OPS',
+                    health: (i % 4 + 1),
+                    isApproved: (i % 4 === 3),
+                    sap: `REQ-${1000 + i}`
+                });
+            }
+            filteredData = [...fullData];
+        }
+
+        function renderNexusTable() {
+            const tbody = document.getElementById('tableBody');
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedItems = filteredData.slice(start, end);
+
+            tbody.innerHTML = paginatedItems.map(row => `
+                <tr>
+                    <td><input type="checkbox" class="form-check-input"></td>
+                    <td><span class="fw-bold text-primary">#${row.ref}</span></td>
+                    <td>
+                        <div class="fw-bold">${row.item}</div>
+                        <div class="text-muted" style="font-size: 0.65rem;">${row.category}</div>
+                    </td>
+                    <td><span class="badge bg-light text-dark">${row.qty} Units</span></td>
+                    <td class="fw-bold">₹${row.val.toLocaleString('en-IN')}</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="fw-600">${row.user}</div>
+                            <small class="text-muted">/ ${row.dept}</small>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="progress-micro mb-1">
+                            <div style="width: ${row.health * 25}%; height:100%; background: ${row.isApproved ? 'var(--accent-success)' : 'var(--accent-warning)'}"></div>
+                        </div>
+                        <div class="status-pill ${row.isApproved ? 'status-released' : 'status-pending'}">
+                            <i class="bi ${row.isApproved ? 'bi-check-circle-fill' : 'bi-clock-history'}"></i>
+                            ${row.isApproved ? 'Released' : 'Step ' + row.health + ' / 4'}
+                        </div>
+                    </td>
+                    <td><code class="sap-ref">${row.sap}</code></td>
+                    <td class="text-end">
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-light border"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-sm btn-light border text-primary"><i class="bi bi-pencil-square"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            updatePagination();
+            updateTableInfo(start, end);
+        }
+
+        function updateTableInfo(start, end) {
+            const total = filteredData.length;
+            const actualEnd = end > total ? total : end;
+            document.getElementById('tableInfo').innerText = `Showing ${start + 1} to ${actualEnd} of ${total} entries`;
+        }
+
+        function handleSort(key) {
+            if (currentSort.key === key) currentSort.asc = !currentSort.asc;
+            else { currentSort.key = key; currentSort.asc = true; }
+            
+            filteredData.sort((a, b) => {
+                let vA = a[key], vB = b[key];
+                if (typeof vA === 'string') return currentSort.asc ? vA.localeCompare(vB) : vB.localeCompare(vA);
+                return currentSort.asc ? vA - vB : vB - vA;
+            });
+            renderNexusTable();
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            const container = document.getElementById('paginationControls');
+            let html = `
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePage(${currentPage - 1})"><i class="bi bi-chevron-left"></i></a>
+                </li>
+            `;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `
+                        <li class="page-item ${currentPage === i ? 'active' : ''}">
+                            <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+                        </li>
+                    `;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                }
+            }
+
+            html += `
+                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePage(${currentPage + 1})"><i class="bi bi-chevron-right"></i></a>
+                </li>
+            `;
+            container.innerHTML = html;
+        }
+
+        function changePage(p) {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (p < 1 || p > totalPages) return;
+            currentPage = p;
+            renderNexusTable();
+        }
+
+        function toggleFilters() {
+            const drawer = document.getElementById('filterDrawer');
+            drawer.style.display = drawer.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.getElementById('globalSearch').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            filteredData = fullData.filter(row => 
+                row.item.toLowerCase().includes(term) || 
+                row.sap.toLowerCase().includes(term) ||
+                row.user.toLowerCase().includes(term)
+            );
+            currentPage = 1;
+            renderNexusTable();
+        });
+
+        generateData();
+        renderNexusTable();
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/') { e.preventDefault(); document.getElementById('globalSearch').focus(); }
+        });
+    </script>
+</body>
+</html>

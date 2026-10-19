@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eConnect | Budget Entry</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        /* ---------- Line item grid ---------- */
+        #entryTable { min-width: 1080px; }
+        #entryTable th { white-space: nowrap; font-weight: 700; }
+        #entryTable td { vertical-align: middle; }
+        #entryTable .num-cell { width: 36px; color: #94a3b8; font-weight: 700; }
+        #entryTable input:disabled,
+        #entryTable select:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+        #entryTable .f-qty:disabled::placeholder { color: #94a3b8; font-style: italic; }
+        #entryTable .est-cell { font-weight: 700; color: #0f172a; white-space: nowrap; }
+        #entryTable tr.line-row.changed > td:first-child { box-shadow: inset 3px 0 0 #f59e0b; }
+        #entryTable tr.line-row.added > td:first-child { box-shadow: inset 3px 0 0 #10b981; }
+        #entryTable tr.att-row > td { background: #f8fafc; border-top: 0; padding: 12px 16px; }
+        .att-toggle { position: relative; }
+        .att-toggle .att-count {
+            font-size: 10px; min-width: 18px; padding: 2px 5px; border-radius: 9px;
+            background: #e2e8f0; color: #334155; margin-left: 4px;
+        }
+        .att-toggle.has-files .att-count { background: #0d6efd; color: #fff; }
+        .att-toggle.open { background: #e0ecff; border-color: #0d6efd; }
+        .qty-hint { font-size: 10px; color: #94a3b8; display: block; line-height: 1.1; margin-top: 2px; }
+
+        /* ---------- Totals ---------- */
+        .total-split { font-size: 12px; color: #64748b; }
+        .total-split b { color: #334155; }
+
+        /* ---------- Edit mode banner ---------- */
+        .edit-banner {
+            background: #fffbeb; border: 1px solid #fde68a; color: #92400e;
+            border-radius: 10px; padding: 10px 14px; font-size: 13px;
+        }
+        .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin: 0 4px 0 10px; vertical-align: middle; }
+
+        /* ---------- Listing ---------- */
+        .status.draft { background: #f1f5f9; color: #475569; }
+        .type-pills .status-pill { margin-right: 4px; }
+
+        /* ---------- Reason modal ---------- */
+        .change-list { max-height: 220px; overflow: auto; font-size: 12px; }
+        .change-list td { padding: 4px 8px; }
+        .delta-up { color: #b45309; font-weight: 700; }
+        .delta-down { color: #047857; font-weight: 700; }
+    </style>
+</head>
+
+<body>
+
+    <div id="sidebar-placeholder"></div>
+    <div id="header-placeholder"></div>
+    <main id="main-wrapper">
+        <div class="sticky-header px-3 py-2 mb-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <nav class="breadcrumb mb-0">
+                    <h5 class="fw-bold mb-0">Budget Entry</h5>
+                </nav>
+                <div class="d-flex gap-3">
+                    <button class="btn btn-light">
+                        <i class="bi bi-download me-2 text-primary"></i>Export
+                    </button>
+                    <button class="btn btn-premium px-4" onclick="openBudget('new')">
+                        <i class="bi bi-plus-lg me-2"></i>Initiate Budget
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= FILTERS ================= -->
+        <div class="dcard mb-2">
+            <div class="row g-3">
+                <div class="fw-bold text-dark"><i class="bi bi-funnel me-2"></i>Filters:</div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted">Global Search</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" id="fSearch" class="form-control border-start-0"
+                            placeholder="ID or Description or Category...">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">Budget Type (any line)</label>
+                    <select class="form-select" id="fType">
+                        <option value="">All Types</option>
+                        <option value="CAPEX">CAPEX (Capital)</option>
+                        <option value="OPEX">OPEX (Revenue)</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">Approval Status</label>
+                    <select class="form-select" id="fStatus">
+                        <option value="">All</option>
+                        <option value="Draft">Draft</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">From Date</label>
+                    <input type="date" id="fFrom" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">To Date</label>
+                    <input type="date" id="fTo" class="form-control">
+                </div>
+                <div class="col-md-12 d-flex justify-content-end gap-2">
+                    <button class="btn btn-light" onclick="clearFilters()">
+                        <i class="bi bi-arrow-clockwise me-2 text-secondary"></i>Clear
+                    </button>
+                    <button class="btn btn-premium" onclick="renderListing()">
+                        <i class="bi bi-funnel-fill me-2"></i>Filter
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= LISTING ================= -->
+        <div class="table-container">
+            <table class="table table-hover mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Budget ID</th>
+                        <th>Description</th>
+                        <th>Budget Types</th>
+                        <th>Line Items</th>
+                        <th>Annual Total</th>
+                        <th>Approval Status</th>
+                    </tr>
+                </thead>
+                <tbody id="listingBody"></tbody>
+            </table>
+            <div class="p-4 bg-light bg-opacity-50 border-top d-flex justify-content-between align-items-center">
+                <span class="small text-muted" id="listingCount"></span>
+                <nav>
+                    <ul class="pagination pagination-sm m-0">
+                        <li class="page-item disabled"><a class="page-link border-0 rounded-3" href="#">Prev</a></li>
+                        <li class="page-item active"><a class="page-link border-0 rounded-3 mx-1" href="#">1</a></li>
+                        <li class="page-item disabled"><a class="page-link border-0 rounded-3" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= BUDGET MODAL (New / Edit-Enhancement / View) ================= -->
+    <div class="modal fade" id="budgetModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header p-3">
+                    <div>
+                        <h4 class="modal-title fw-bold" id="budgetModalTitle">Budget Initiation Form</h4>
+                        <div class="small text-muted" id="budgetModalSub"></div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="wo-content">
+                        <div class="sticky-tabs-container">
+                            <ul class="nav nav-tabs mb-2 custom-tabs">
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#details" title="Details">
+                                        <i class="fas fa-clipboard-list"></i><span class="tab-label">Details</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#approvers" title="Approvers">
+                                        <i class="fa fa-users"></i><span class="tab-label">Approvers</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#audit" title="Audit Log">
+                                        <i class="fa-solid fa-clock-rotate-left"></i><span class="tab-label">Audit Log</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="tab-content">
+                            <!-- ---------- DETAILS ---------- -->
+                            <div class="tab-pane fade show active" id="details">
+                                <div class="row g-4">
+
+                                    <div class="col-12 d-none" id="editBanner">
+                                        <div class="edit-banner d-flex align-items-start gap-2">
+                                            <i class="bi bi-pencil-square fs-5"></i>
+                                            <div>
+                                                <b>Edit / Enhancement mode.</b> You can change any line item, add new lines or remove lines.
+                                                You will be asked for a <b>reason for change</b> before the changes are submitted; the budget then goes back for re-approval.
+                                                <div class="mt-1 small">
+                                                    <span class="legend-dot" style="background:#f59e0b;margin-left:0"></span>Modified line
+                                                    <span class="legend-dot" style="background:#10b981"></span>New line
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Section A -->
+                                    <div class="col-12">
+                                        <div class="dcard">
+                                            <div class="mb-2"><span class="section-tag">Section A: Basic Information</span></div>
+                                            <div class="row g-3">
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Plant</label>
+                                                    <input type="text" class="form-control sap-input" id="hPlant" readonly>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Department</label>
+                                                    <input type="text" class="form-control sap-input" id="hDept" readonly>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Requested By</label>
+                                                    <input type="text" class="form-control sap-input" id="hReqBy" readonly>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-bold">Budget Year</label>
+                                                    <select class="form-select hdr-field" id="budgetYear"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row g-3 mt-1">
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-bold">Budget Description <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control hdr-field" id="budgetDescription" maxlength="200"
+                                                        placeholder="Enter a short description for this budget...">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-bold">From Date <span class="text-danger">*</span></label>
+                                                    <input type="date" class="form-control hdr-field" id="budgetFromDate">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label fw-bold">End Date <span class="text-danger">*</span></label>
+                                                    <input type="date" class="form-control hdr-field" id="budgetToDate">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Section B -->
+                                    <div class="col-12">
+                                        <div class="dcard">
+                                            <div class="section-header">
+                                                <div class="mb-2"><span class="section-tag">Section B: Budget Line Items</span></div>
+                                                <button type="button" id="addLineBtn"
+                                                    class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="addLine()">
+                                                    <i class="bi bi-plus-circle me-1"></i> Add Line Item
+                                                </button>
+                                            </div>
+                                            <div class="small text-muted mb-2">
+                                                <i class="bi bi-info-circle me-1"></i>
+                                                Budget Type is chosen per line. Categories come from the
+                                                <a href="budget_category_master.html" target="_blank">Budget Category Master</a>.
+                                                CAPEX lines need a Quantity (Estimate = Qty × Unit Price); OPEX lines have no Quantity (Estimate = Price).
+                                            </div>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-sm align-middle mb-0" id="entryTable">
+                                                    <thead>
+                                                        <tr class="small text-muted">
+                                                            <th class="num-cell">#</th>
+                                                            <th style="width:140px">Budget Type <span class="text-danger">*</span></th>
+                                                            <th style="width:210px">Budget Category <span class="text-danger">*</span></th>
+                                                            <th>Brief Description <span class="text-danger">*</span></th>
+                                                            <th style="width:105px">Quantity</th>
+                                                            <th style="width:130px">Price (₹) <span class="text-danger">*</span></th>
+                                                            <th style="width:130px" class="text-end">Estimate (₹)</th>
+                                                            <th style="width:90px" class="text-center">Attachments</th>
+                                                            <th style="width:50px" class="text-center act-col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tableBody"></tbody>
+                                                    <tfoot>
+                                                        <tr class="table-light">
+                                                            <td colspan="6" class="text-end py-2">
+                                                                <span class="total-split me-3">CAPEX: <b id="capexTotal">₹0.00</b></span>
+                                                                <span class="total-split me-3">OPEX: <b id="opexTotal">₹0.00</b></span>
+                                                                <span class="fw-bold">Grand Total:</span>
+                                                            </td>
+                                                            <td class="fw-bold text-primary py-2 text-end"><span id="grandTotal">₹0.00</span></td>
+                                                            <td colspan="2"></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ---------- APPROVERS ---------- -->
+                            <div class="tab-pane fade" id="approvers">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <th>Approval Level</th>
+                                        <th>Department</th>
+                                        <th>Team Name</th>
+                                        <th>Team Member</th>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Engineering</td>
+                                        <td>Engineering Review Team</td>
+                                        <td>Vikram (000007)</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- ---------- AUDIT LOG ---------- -->
+                            <div class="tab-pane fade" id="audit">
+                                <table class="table table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" style="width:10%">Action</th>
+                                            <th rowspan="2" style="width:10%">Done By</th>
+                                            <th rowspan="2" style="width:12%">Date & Time</th>
+                                            <th colspan="3" class="bg-secondary text-white">Changes</th>
+                                            <th rowspan="2" style="width:15%">Reason</th>
+                                            <th rowspan="2" style="width:8%">Status</th>
+                                        </tr>
+                                        <tr class="table-secondary">
+                                            <th style="width:15%">Field</th>
+                                            <th style="width:15%">Old Value</th>
+                                            <th style="width:15%">New Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="auditBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer p-3 d-flex justify-content-between align-items-center">
+                    <button type="button" class="btn btn-link text-muted fw-semibold text-decoration-none" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-2"></i>Close
+                    </button>
+                    <div class="d-flex gap-2" id="footerActions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= REASON FOR CHANGE MODAL ================= -->
+    <div class="modal fade" id="reasonModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header p-3">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-chat-left-text me-2 text-warning"></i>Reason for Change</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex flex-wrap gap-4 mb-3 small">
+                        <div>Change Type<br><span class="fw-bold" id="rcType"></span></div>
+                        <div>Previous Total<br><span class="fw-bold" id="rcOld"></span></div>
+                        <div>Revised Total<br><span class="fw-bold" id="rcNew"></span></div>
+                        <div>Difference<br><span id="rcDelta"></span></div>
+                    </div>
+                    <label class="form-label small fw-bold text-muted">Changes being submitted (<span id="rcCount"></span>)</label>
+                    <div class="change-list border rounded mb-3">
+                        <table class="table table-sm table-striped mb-0">
+                            <thead class="table-light"><tr><th>Field</th><th>Old Value</th><th>New Value</th></tr></thead>
+                            <tbody id="rcList"></tbody>
+                        </table>
+                    </div>
+                    <label class="form-label fw-bold" for="rcReason">Reason for Change <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="rcReason" rows="3" maxlength="500"
+                        placeholder="Explain why these line items are being changed (min. 10 characters)"></textarea>
+                    <div class="invalid-feedback">Please enter a reason of at least 10 characters.</div>
+                    <div class="small text-muted mt-1"><span id="rcChars">0</span>/500</div>
+                </div>
+                <div class="modal-footer p-3">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Back to Edit</button>
+                    <button type="button" class="btn btn-premium px-4 fw-bold" onclick="confirmChange()">
+                        Confirm & Submit <i class="bi bi-send-fill ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:2000">
+        <div id="appToast" class="toast align-items-center text-bg-dark border-0" role="status">
+            <div class="d-flex">
+                <div class="toast-body" id="appToastBody"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../sidebar.js"></script>
+    <script src="../header.js"></script>
+    <script src="budget_category_master.js"></script>
+
+    <script>
+        /* =====================================================================
+           MOCK DATA - budgets with line-item level Budget Type / Category
+           ===================================================================== */
+        const USER = 'Stores (000037)';
+        let BUDGETS = [
+            {
+                id: 'BGT-2026-001', plant: 'ML11', dept: 'Production', requestedBy: '(000037)',
+                year: 2026, description: 'Routine machine upkeep - Block A',
+                from: '2026-04-01', to: '2027-03-31', status: 'Approved',
+                lines: [
+                    { uid: 'L1', type: 'OPEX', cat: 'OPX-MSS', desc: 'Compression machine spares & service', qty: null, price: 90000,
+                      attachments: [{ kind: 'Document', desc: 'Maintenance SOP document', name: 'SOP_Maintenance.pdf', size: '1.2 MB' }] },
+                    { uid: 'L2', type: 'OPEX', cat: 'OPX-WTR', desc: 'Purified water plant consumables', qty: null, price: 60000, attachments: [] },
+                    { uid: 'L3', type: 'CAPEX', cat: 'CPX-PEQ', desc: 'Tablet deduster with metal detector', qty: 2, price: 185000,
+                      attachments: [{ kind: 'Image', desc: 'Equipment condition photo', name: 'motor_photo.jpg', size: '450 KB' },
+                                    { kind: 'URL', desc: 'Vendor catalogue', name: 'https://example.com', size: 'NA' }] }
+                ],
+                audit: [{ action: 'Created', by: 'Jane Smith', at: '2026-03-12 09:30 AM', changes: [], reason: 'Initial creation', status: 'Approved' }]
+            },
+            {
+                id: 'BGT-2026-002', plant: 'ML11', dept: 'Production', requestedBy: '(000037)',
+                year: 2026, description: 'Mandatory compliance for cleanroom standards',
+                from: '2026-04-01', to: '2027-03-31', status: 'Rejected',
+                lines: [
+                    { uid: 'L1', type: 'CAPEX', cat: 'CPX-CIV', desc: 'Epoxy flooring for Grade C area', qty: 1, price: 450000, attachments: [] },
+                    { uid: 'L2', type: 'CAPEX', cat: 'CPX-HVA', desc: 'AHU HEPA filter banks', qty: 8, price: 50000, attachments: [] }
+                ],
+                audit: [{ action: 'Created', by: 'Jane Smith', at: '2026-03-14 11:05 AM', changes: [], reason: 'Initial creation', status: 'Rejected' }]
+            },
+            {
+                id: 'BGT-2026-003', plant: 'ML11', dept: 'Quality Control', requestedBy: '(000052)',
+                year: 2026, description: 'QC lab running expenses',
+                from: '2026-04-01', to: '2027-03-31', status: 'Pending',
+                lines: [
+                    { uid: 'L1', type: 'OPEX', cat: 'OPX-QCA', desc: 'HPLC annual maintenance contract', qty: null, price: 240000, attachments: [] },
+                    { uid: 'L2', type: 'OPEX', cat: 'OPX-CAL', desc: 'Balance & pipette calibration', qty: null, price: 45000, attachments: [] }
+                ],
+                audit: [{ action: 'Created', by: 'Ravi K', at: '2026-04-02 04:15 PM', changes: [], reason: 'Initial creation', status: 'Pending' }]
+            }
+        ];
+
+        /* =====================================================================
+           HELPERS
+           ===================================================================== */
+        const $ = (id) => document.getElementById(id);
+        const inr = (n) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(n || 0);
+        const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const clone = (o) => JSON.parse(JSON.stringify(o));
+        const catName = (code) => (getBudgetCategory(code) || {}).name || '';
+        let uidSeq = 1;
+
+        function lineEstimate(l) {
+            const price = parseFloat(l.price) || 0;
+            if (l.type === 'CAPEX') return (parseFloat(l.qty) || 0) * price;
+            if (l.type === 'OPEX') return price;
+            return 0;
+        }
+        const budgetTotal = (b) => b.lines.reduce((s, l) => s + lineEstimate(l), 0);
+
+        function nowStamp() {
+            const d = new Date();
+            const p = (n) => String(n).padStart(2, '0');
+            let h = d.getHours(); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+            return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(h)}:${p(d.getMinutes())} ${ap}`;
+        }
+
+        function toast(msg) {
+            $('appToastBody').innerHTML = msg;
+            bootstrap.Toast.getOrCreateInstance($('appToast'), { delay: 3500 }).show();
+        }
+
+        /* =====================================================================
+           LISTING
+           ===================================================================== */
+        function renderListing() {
+            const q = $('fSearch').value.trim().toLowerCase();
+            const t = $('fType').value, s = $('fStatus').value, f = $('fFrom').value, to = $('fTo').value;
+
+            const rows = BUDGETS.filter((b) => {
+                const cats = b.lines.map((l) => catName(l.cat)).join(' ');
+                if (q && !`${b.id} ${b.description} ${cats}`.toLowerCase().includes(q)) return false;
+                if (t && !b.lines.some((l) => l.type === t)) return false;
+                if (s && b.status !== s) return false;
+                if (f && b.from < f) return false;
+                if (to && b.to > to) return false;
+                return true;
+            });
+
+            $('listingBody').innerHTML = rows.length ? rows.map((b) => {
+                const types = [...new Set(b.lines.map((l) => l.type))];
+                const cats = [...new Set(b.lines.map((l) => catName(l.cat)))];
+                return `
+                <tr>
+                    <td class="fw-bold text-nowrap">
+                        <div class="dropdown d-flex align-items-center">
+                            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
+                            <ul class="dropdown-menu shadow-sm">
+                                <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="openBudget('view','${b.id}');return false;">
+                                    <i class="bi bi-eye text-primary"></i> View</a></li>
+                                <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="openBudget('edit','${b.id}');return false;">
+                                    <i class="bi bi-pencil-square text-warning"></i> Edit / Enhancement</a></li>
+                            </ul>
+                            <span class="ms-2">${b.id}</span>
+                        </div>
+                    </td>
+                    <td><div class="small text-muted">${esc(b.description)}</div></td>
+                    <td class="type-pills">${types.map((x) => `<span class="status-pill bg-${x.toLowerCase()}">${x}</span>`).join('')}</td>
+                    <td><span class="badge bg-light text-dark" title="${esc(cats.join(', '))}">${b.lines.length} line${b.lines.length === 1 ? '' : 's'}</span>
+                        <div class="small text-muted text-truncate" style="max-width:220px">${esc(cats.join(', '))}</div></td>
+                    <td class="fw-bold">${inr(budgetTotal(b))}</td>
+                    <td><span class="status ${b.status.toLowerCase()}">${b.status}</span></td>
+                </tr>`;
+            }).join('') : `<tr><td colspan="6" class="text-center text-muted py-4">No budgets match the filters.</td></tr>`;
+
+            $('listingCount').textContent = `Showing ${rows.length ? 1 : 0} to ${rows.length} of ${rows.length} entries`;
+        }
+
+        function clearFilters() {
+            ['fSearch', 'fType', 'fStatus', 'fFrom', 'fTo'].forEach((id) => ($(id).value = ''));
+            renderListing();
+        }
+
+        /* =====================================================================
+           BUDGET FORM STATE
+           ===================================================================== */
+        let mode = 'new';        // 'new' | 'edit' | 'view'
+        let current = null;      // working copy of the budget being edited
+        let original = null;     // snapshot taken when Edit / Enhancement opened
+
+        function newLine() {
+            return { uid: 'N' + (uidSeq++), type: '', cat: '', desc: '', qty: null, price: null, attachments: [], _open: false };
+        }
+
+        function openBudget(m, id) {
+            mode = m;
+            const year = new Date().getFullYear();
+
+            if (m === 'new') {
+                current = {
+                    id: null, plant: 'ML11', dept: 'Production', requestedBy: '(000037)', year,
+                    description: '', from: '', to: '', status: 'Draft', lines: [newLine()], audit: []
+                };
+                original = null;
+            } else {
+                const b = BUDGETS.find((x) => x.id === id);
+                current = clone(b);
+                current.lines.forEach((l) => (l._open = false));
+                original = clone(b);
+            }
+
+            $('budgetModalTitle').textContent =
+                m === 'new' ? 'Budget Initiation Form' : m === 'edit' ? `Edit / Enhancement - ${current.id}` : `View Budget - ${current.id}`;
+            $('budgetModalSub').innerHTML = m === 'new' ? '' :
+                `Current status: <span class="status ${current.status.toLowerCase()}" style="font-size:11px;padding:2px 10px">${current.status}</span>`;
+            $('editBanner').classList.toggle('d-none', m !== 'edit');
+            $('addLineBtn').classList.toggle('d-none', m === 'view');
+
+            // header fields
+            setupYearAndDates();
+            $('hPlant').value = current.plant;
+            $('hDept').value = current.dept;
+            $('hReqBy').value = current.requestedBy;
+            $('budgetYear').value = current.year;
+            $('budgetDescription').value = current.description;
+            $('budgetFromDate').value = current.from;
+            $('budgetToDate').value = current.to;
+            document.querySelectorAll('.hdr-field').forEach((el) => { el.disabled = m === 'view'; el.classList.remove('is-invalid'); });
+
+            // footer
+            $('footerActions').innerHTML =
+                m === 'new' ? `
+                    <button type="button" class="btn btn-light px-4 py-2 fw-bold text-secondary border shadow-sm" onclick="saveNew('Draft')">Save as Draft</button>
+                    <button type="button" class="btn btn-premium px-5 fw-bold shadow-sm d-flex align-items-center" onclick="saveNew('Pending')">
+                        Submit for Approval <i class="bi bi-send-fill ms-2"></i></button>` :
+                m === 'edit' ? `
+                    <button type="button" class="btn btn-light px-4 py-2 fw-bold text-secondary border shadow-sm" onclick="resetEdit()">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>Reset Changes</button>
+                    <button type="button" class="btn btn-premium px-5 fw-bold shadow-sm d-flex align-items-center" onclick="submitEdit()">
+                        Submit Changes <i class="bi bi-send-fill ms-2"></i></button>` : '';
+
+            renderLines();
+            renderAudit();
+            bootstrap.Tab.getOrCreateInstance(document.querySelector('[data-bs-target="#details"]')).show();
+            bootstrap.Modal.getOrCreateInstance($('budgetModal')).show();
+        }
+
+        /* =====================================================================
+           LINE ITEMS
+           ===================================================================== */
+        function categoryOptions(line) {
+            if (!line.type) return `<option value="">Select Budget Type first</option>`;
+            let cats = getBudgetCategories(line.type);
+            // keep a previously-saved category visible even if it was later deactivated in the master
+            const saved = getBudgetCategory(line.cat);
+            if (saved && !saved.active && saved.type === line.type) cats = [...cats, saved];
+            return `<option value="">Select ${line.type} Category...</option>` +
+                cats.map((c) => `<option value="${c.code}" ${c.code === line.cat ? 'selected' : ''}>${esc(c.name)}${c.active ? '' : ' (inactive)'}</option>`).join('');
+        }
+
+        function lineState(line) {
+            if (mode !== 'edit' || !original) return '';
+            const o = original.lines.find((x) => x.uid === line.uid);
+            if (!o) return 'added';
+            return lineDiff(o, line).length ? 'changed' : '';
+        }
+
+        function renderLines() {
+            const ro = mode === 'view';
+            const tbody = $('tableBody');
+            document.querySelectorAll('#entryTable .act-col').forEach((el) => el.classList.toggle('d-none', ro));
+
+            if (!current.lines.length) {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-3">No line items. Click <b>Add Line Item</b>.</td></tr>`;
+                calculateTotal();
+                return;
+            }
+
+            tbody.innerHTML = current.lines.map((l, i) => {
+                const isCapex = l.type === 'CAPEX';
+                const nFiles = l.attachments.length;
+                return `
+                <tr class="line-row ${lineState(l)}" data-uid="${l.uid}">
+                    <td class="num-cell">${i + 1}</td>
+                    <td>
+                        <select class="form-select form-select-sm f-type" ${ro ? 'disabled' : ''}>
+                            <option value="">Select...</option>
+                            <option value="CAPEX" ${l.type === 'CAPEX' ? 'selected' : ''}>CAPEX</option>
+                            <option value="OPEX" ${l.type === 'OPEX' ? 'selected' : ''}>OPEX</option>
+                        </select>
+                    </td>
+                    <td><select class="form-select form-select-sm f-cat" ${ro || !l.type ? 'disabled' : ''}>${categoryOptions(l)}</select></td>
+                    <td><input type="text" class="form-control form-control-sm f-desc" maxlength="150" placeholder="Brief description..."
+                        value="${esc(l.desc)}" ${ro ? 'disabled' : ''}></td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm text-end f-qty" min="1" step="1"
+                            placeholder="${isCapex ? '0' : 'N/A'}" value="${isCapex && l.qty != null ? l.qty : ''}"
+                            ${ro || !isCapex ? 'disabled' : ''}>
+                    </td>
+                    <td><input type="number" class="form-control form-control-sm text-end f-price" min="0" step="0.01"
+                        placeholder="0.00" value="${l.price ?? ''}" ${ro ? 'disabled' : ''}>
+                        <span class="qty-hint">${isCapex ? 'Unit price' : l.type === 'OPEX' ? 'Lump-sum amount' : '&nbsp;'}</span></td>
+                    <td class="text-end est-cell">${inr(lineEstimate(l))}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-light border att-toggle ${nFiles ? 'has-files' : ''} ${l._open ? 'open' : ''}"
+                            title="Line item attachments"><i class="bi bi-paperclip"></i><span class="att-count">${nFiles}</span></button>
+                    </td>
+                    <td class="text-center act-col ${ro ? 'd-none' : ''}">
+                        <button type="button" class="btn btn-sm text-danger del-row" title="Remove line"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr class="att-row ${l._open ? '' : 'd-none'}" data-uid="${l.uid}">
+                    <td colspan="9">${attachmentPanel(l, i)}</td>
+                </tr>`;
+            }).join('');
+            calculateTotal();
+        }
+
+        function attachmentPanel(l, i) {
+            const ro = mode === 'view';
+            const form = ro ? '' : `
+                <div class="row g-2 align-items-end mb-2">
+                    <div class="col-md-2">
+                        <label class="form-label small text-muted mb-1">Attachment Type</label>
+                        <select class="form-select form-select-sm a-kind">
+                            <option value="Document">📄 Document</option>
+                            <option value="Image">🖼️ Image</option>
+                            <option value="URL">🔗 URL</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small text-muted mb-1">Description</label>
+                        <input type="text" class="form-control form-control-sm a-desc" maxlength="100" placeholder="Max 100 characters">
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label small text-muted mb-1">File / URL</label>
+                        <input type="file" class="form-control form-control-sm a-file">
+                        <input type="url" class="form-control form-control-sm a-url d-none" placeholder="https://">
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-premium btn-sm w-100 a-add" title="Add attachment"><i class="bi bi-plus-circle"></i></button>
+                    </div>
+                </div>`;
+            const icon = { Document: 'bi-file-earmark-text text-primary', Image: 'bi-image text-success', URL: 'bi-link-45deg text-secondary' };
+            const rows = l.attachments.length ? l.attachments.map((a, k) => `
+                <tr>
+                    <td><i class="bi ${icon[a.kind]} me-1"></i>${a.kind}</td>
+                    <td>${esc(a.desc)}</td>
+                    <td>${a.kind === 'URL'
+                        ? `<a href="${esc(a.name)}" target="_blank" rel="noopener" class="text-decoration-none"><i class="bi bi-box-arrow-up-right me-1"></i>${esc(a.name)}</a>`
+                        : `<a href="#" class="text-decoration-none">${esc(a.name)}</a>`}</td>
+                    <td class="text-center">${esc(a.size)}</td>
+                    ${ro ? '' : `<td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger a-del" data-k="${k}"><i class="bi bi-trash"></i></button></td>`}
+                </tr>`).join('')
+                : `<tr><td colspan="${ro ? 4 : 5}" class="text-center text-muted small">No attachments for this line.</td></tr>`;
+            return `
+                <div class="small fw-bold mb-2"><i class="bi bi-paperclip me-1"></i>Attachments - Line ${i + 1}${l.desc ? ': ' + esc(l.desc) : ''}</div>
+                ${form}
+                <table class="table table-sm table-bordered bg-white mb-1">
+                    <thead class="table-light"><tr><th style="width:15%">Type</th><th>Description</th><th>File / URL</th><th style="width:10%" class="text-center">Size</th>${ro ? '' : '<th style="width:8%" class="text-center">Action</th>'}</tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>
+                ${ro ? '' : '<small class="text-muted"><i class="bi bi-info-circle me-1"></i>Maximum upload size per line: 25 MB</small>'}`;
+        }
+
+        const findLine = (uid) => current.lines.find((l) => l.uid === uid);
+
+        function refreshRowMeta(tr, line) {
+            tr.querySelector('.est-cell').textContent = inr(lineEstimate(line));
+            tr.classList.remove('changed', 'added');
+            const st = lineState(line);
+            if (st) tr.classList.add(st);
+            calculateTotal();
+        }
+
+        function addLine() {
+            current.lines.push(newLine());
+            renderLines();
+            const rows = document.querySelectorAll('#tableBody tr.line-row');
+            rows[rows.length - 1]?.querySelector('.f-type')?.focus();
+        }
+
+        function calculateTotal() {
+            let capex = 0, opex = 0;
+            current.lines.forEach((l) => { if (l.type === 'CAPEX') capex += lineEstimate(l); else if (l.type === 'OPEX') opex += lineEstimate(l); });
+            $('capexTotal').textContent = inr(capex);
+            $('opexTotal').textContent = inr(opex);
+            $('grandTotal').textContent = inr(capex + opex);
+        }
+
+        // ---- delegated events on the line grid ----
+        $('tableBody').addEventListener('change', (e) => {
+            const tr = e.target.closest('tr.line-row');
+            if (!tr) return;
+            const line = findLine(tr.dataset.uid);
+
+            if (e.target.classList.contains('f-type')) {
+                line.type = e.target.value;
+                line.cat = '';                              // category list depends on type
+                if (line.type !== 'CAPEX') line.qty = null; // OPEX has no quantity
+                renderLines();
+                document.querySelector(`tr.line-row[data-uid="${line.uid}"] .f-cat`)?.focus();
+            } else if (e.target.classList.contains('f-cat')) {
+                line.cat = e.target.value;
+                e.target.classList.remove('is-invalid');
+                refreshRowMeta(tr, line);
+            }
+        });
+
+        $('tableBody').addEventListener('input', (e) => {
+            const tr = e.target.closest('tr.line-row');
+            if (!tr) return;
+            const line = findLine(tr.dataset.uid);
+            const el = e.target;
+            el.classList.remove('is-invalid');
+            if (el.classList.contains('f-desc')) line.desc = el.value;
+            if (el.classList.contains('f-qty')) line.qty = el.value === '' ? null : Number(el.value);
+            if (el.classList.contains('f-price')) line.price = el.value === '' ? null : Number(el.value);
+            refreshRowMeta(tr, line);
+        });
+
+        $('tableBody').addEventListener('click', (e) => {
+            const lineTr = e.target.closest('tr.line-row');
+            const attTr = e.target.closest('tr.att-row');
+
+            if (lineTr && e.target.closest('.del-row')) {
+                const line = findLine(lineTr.dataset.uid);
+                if ((line.desc || line.price) && !confirm('Remove this line item?')) return;
+                current.lines = current.lines.filter((l) => l.uid !== line.uid);
+                renderLines();
+                return;
+            }
+            if (lineTr && e.target.closest('.att-toggle')) {
+                const line = findLine(lineTr.dataset.uid);
+                line._open = !line._open;
+                renderLines();
+                return;
+            }
+            if (attTr && e.target.closest('.a-add')) {
+                const line = findLine(attTr.dataset.uid);
+                const kind = attTr.querySelector('.a-kind').value;
+                const desc = attTr.querySelector('.a-desc').value.trim();
+                let name = '', size = 'NA';
+                if (kind === 'URL') {
+                    name = attTr.querySelector('.a-url').value.trim();
+                    if (!/^https?:\/\/\S+$/i.test(name)) { attTr.querySelector('.a-url').classList.add('is-invalid'); return; }
+                } else {
+                    const f = attTr.querySelector('.a-file').files[0];
+                    if (!f) { attTr.querySelector('.a-file').classList.add('is-invalid'); return; }
+                    if (f.size > 25 * 1024 * 1024) { alert('File exceeds 25 MB.'); return; }
+                    name = f.name;
+                    size = f.size > 1048576 ? (f.size / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB';
+                }
+                line.attachments.push({ kind, desc: desc || '-', name, size });
+                renderLines();
+                return;
+            }
+            if (attTr && e.target.closest('.a-del')) {
+                const line = findLine(attTr.dataset.uid);
+                line.attachments.splice(Number(e.target.closest('.a-del').dataset.k), 1);
+                renderLines();
+            }
+        });
+
+        // swap file <-> url input when attachment type changes
+        $('tableBody').addEventListener('change', (e) => {
+            if (!e.target.classList.contains('a-kind')) return;
+            const tr = e.target.closest('tr.att-row');
+            const isUrl = e.target.value === 'URL';
+            tr.querySelector('.a-file').classList.toggle('d-none', isUrl);
+            tr.querySelector('.a-url').classList.toggle('d-none', !isUrl);
+        });
+
+        /* =====================================================================
+           VALIDATION
+           ===================================================================== */
+        function readHeader() {
+            current.year = Number($('budgetYear').value);
+            current.description = $('budgetDescription').value.trim();
+            current.from = $('budgetFromDate').value;
+            current.to = $('budgetToDate').value;
+        }
+
+        function validate(strict) {
+            readHeader();
+            let ok = true;
+            const mark = (el, bad) => { el.classList.toggle('is-invalid', bad); if (bad) ok = false; };
+
+            mark($('budgetDescription'), !current.description);
+            if (strict) {
+                mark($('budgetFromDate'), !current.from);
+                mark($('budgetToDate'), !current.to || (current.from && current.to < current.from));
+            }
+            if (!current.lines.length) { toast('Add at least one line item.'); return false; }
+
+            current.lines.forEach((l) => {
+                const tr = document.querySelector(`tr.line-row[data-uid="${l.uid}"]`);
+                mark(tr.querySelector('.f-type'), !l.type);
+                mark(tr.querySelector('.f-cat'), !l.cat);
+                mark(tr.querySelector('.f-desc'), !l.desc.trim());
+                if (l.type === 'CAPEX') mark(tr.querySelector('.f-qty'), !(l.qty > 0) || !Number.isInteger(l.qty));
+                mark(tr.querySelector('.f-price'), !(l.price > 0));
+            });
+            if (!ok) toast('<i class="bi bi-exclamation-triangle me-1"></i>Please complete the highlighted fields.');
+            return ok;
+        }
+
+        /* =====================================================================
+           NEW BUDGET
+           ===================================================================== */
+        function stripUi(lines) { return lines.map(({ _open, ...rest }) => rest); }
+
+        function saveNew(status) {
+            if (!validate(status === 'Pending')) return;
+            const n = BUDGETS.length + 1;
+            current.id = `BGT-${current.year}-${String(n).padStart(3, '0')}`;
+            current.status = status;
+            current.lines = stripUi(current.lines);
+            current.audit = [{ action: 'Created', by: USER, at: nowStamp(), changes: [], reason: 'Initial creation', status }];
+            BUDGETS.unshift(current);
+            bootstrap.Modal.getInstance($('budgetModal')).hide();
+            renderListing();
+            toast(`${current.id} ${status === 'Draft' ? 'saved as draft' : 'submitted for approval'}.`);
+        }
+
+        /* =====================================================================
+           EDIT / ENHANCEMENT  (reason for change is mandatory)
+           ===================================================================== */
+        const fmtVal = (field, v) => {
+            if (v === null || v === undefined || v === '') return '-';
+            if (field === 'price' || field === 'estimate') return inr(v);
+            return String(v);
+        };
+
+        function lineDiff(o, n) {
+            const d = [];
+            const push = (label, a, b) => { if (String(a ?? '') !== String(b ?? '')) d.push({ label, old: a, new: b }); };
+            push('Budget Type', o.type, n.type);
+            push('Budget Category', catName(o.cat), catName(n.cat));
+            push('Brief Description', o.desc, n.desc);
+            push('Quantity', o.type === 'CAPEX' ? o.qty : null, n.type === 'CAPEX' ? n.qty : null);
+            push('Price', fmtVal('price', o.price), fmtVal('price', n.price));
+            push('Estimate', fmtVal('estimate', lineEstimate(o)), fmtVal('estimate', lineEstimate(n)));
+            push('Attachments', o.attachments.map((a) => a.name).join(', ') || '-', n.attachments.map((a) => a.name).join(', ') || '-');
+            return d;
+        }
+
+        function collectChanges() {
+            readHeader();
+            const out = [];
+            const hdr = [['Budget Description', 'description'], ['Budget Year', 'year'], ['From Date', 'from'], ['End Date', 'to']];
+            hdr.forEach(([label, k]) => {
+                if (String(original[k]) !== String(current[k])) out.push({ field: label, old: original[k] || '-', new: current[k] || '-' });
+            });
+
+            current.lines.forEach((l, i) => {
+                const o = original.lines.find((x) => x.uid === l.uid);
+                const tag = `Line ${i + 1}`;
+                if (!o) {
+                    out.push({ field: `${tag} (new)`, old: '-',
+                        new: `${l.type} / ${catName(l.cat)} / ${l.desc}${l.type === 'CAPEX' ? ' / Qty ' + l.qty : ''} / ${inr(lineEstimate(l))}` });
+                } else {
+                    lineDiff(o, l).forEach((c) => out.push({ field: `${tag} - ${c.label}`, old: c.old ?? '-', new: c.new ?? '-' }));
+                }
+            });
+            original.lines.forEach((o) => {
+                if (!current.lines.some((l) => l.uid === o.uid)) {
+                    out.push({ field: 'Line removed', old: `${o.type} / ${catName(o.cat)} / ${o.desc} / ${inr(lineEstimate(o))}`, new: '-' });
+                }
+            });
+            return out;
+        }
+
+        let pendingChanges = null;
+
+        function submitEdit() {
+            if (!validate(true)) return;
+            const changes = collectChanges();
+            if (!changes.length) { toast('No changes made - nothing to submit.'); return; }
+
+            const oldT = budgetTotal(original), newT = budgetTotal(current), delta = newT - oldT;
+            pendingChanges = { changes, action: delta > 0 ? 'Enhancement' : 'Edit' };
+
+            $('rcType').textContent = delta > 0 ? 'Enhancement (budget increase)' : delta < 0 ? 'Edit (budget reduction)' : 'Edit (no value change)';
+            $('rcOld').textContent = inr(oldT);
+            $('rcNew').textContent = inr(newT);
+            $('rcDelta').innerHTML = delta === 0 ? '<span class="text-muted">-</span>'
+                : `<span class="${delta > 0 ? 'delta-up' : 'delta-down'}">${delta > 0 ? '+' : '-'} ${inr(Math.abs(delta))}</span>`;
+            $('rcCount').textContent = changes.length;
+            $('rcList').innerHTML = changes.map((c) => `<tr><td class="fw-semibold">${esc(c.field)}</td><td>${esc(c.old)}</td><td>${esc(c.new)}</td></tr>`).join('');
+            $('rcReason').value = '';
+            $('rcReason').classList.remove('is-invalid');
+            $('rcChars').textContent = '0';
+            bootstrap.Modal.getOrCreateInstance($('reasonModal')).show();
+            setTimeout(() => $('rcReason').focus(), 400);
+        }
+
+        $('rcReason').addEventListener('input', (e) => {
+            $('rcChars').textContent = e.target.value.length;
+            e.target.classList.remove('is-invalid');
+        });
+
+        function confirmChange() {
+            const reason = $('rcReason').value.trim();
+            if (reason.length < 10) { $('rcReason').classList.add('is-invalid'); $('rcReason').focus(); return; }
+
+            const idx = BUDGETS.findIndex((b) => b.id === current.id);
+            current.lines = stripUi(current.lines);
+            current.status = 'Pending'; // any edit / enhancement goes back for re-approval
+            current.audit = [
+                { action: pendingChanges.action, by: USER, at: nowStamp(), changes: pendingChanges.changes, reason, status: 'Pending' },
+                ...current.audit
+            ];
+            BUDGETS[idx] = current;
+
+            bootstrap.Modal.getInstance($('reasonModal')).hide();
+            bootstrap.Modal.getInstance($('budgetModal')).hide();
+            renderListing();
+            toast(`${current.id}: ${pendingChanges.changes.length} change(s) submitted for re-approval.`);
+        }
+
+        function resetEdit() {
+            if (!confirm('Discard all changes made in this session?')) return;
+            openBudget('edit', original.id);
+        }
+
+        /* =====================================================================
+           AUDIT LOG
+           ===================================================================== */
+        function renderAudit() {
+            const log = current.audit || [];
+            if (!log.length) { $('auditBody').innerHTML = `<tr><td colspan="8" class="text-center text-muted">No history yet.</td></tr>`; return; }
+            const badge = (s) => {
+                const cls = s === 'Approved' ? 'approved' : s === 'Rejected' ? 'rejected' : 'pending';
+                const ic = s === 'Approved' ? 'bi-check-circle' : s === 'Rejected' ? 'bi-x-circle' : 'bi-hourglass-split';
+                return `<span class="badge-status ${cls}"><i class="bi ${ic}"></i> ${s}</span>`;
+            };
+            $('auditBody').innerHTML = log.map((a) => {
+                const ch = a.changes.length ? a.changes : [{ field: 'NA', old: 'NA', new: 'NA' }];
+                const span = ch.length;
+                return ch.map((c, i) => `
+                    <tr>
+                        ${i === 0 ? `<td rowspan="${span}">${a.action}</td><td rowspan="${span}">${esc(a.by)}</td><td rowspan="${span}">${a.at}</td>` : ''}
+                        <td>${esc(c.field)}</td><td>${esc(c.old)}</td><td>${esc(c.new)}</td>
+                        ${i === 0 ? `<td rowspan="${span}">${esc(a.reason)}</td><td rowspan="${span}">${badge(a.status)}</td>` : ''}
+                    </tr>`).join('');
+            }).join('');
+        }
+
+        /* =====================================================================
+           YEAR / DATE SETUP
+           ===================================================================== */
+        function setupYearAndDates() {
+            const cy = new Date().getFullYear();
+            const years = [...new Set([cy, cy + 1, current?.year].filter(Boolean))].sort();
+            $('budgetYear').innerHTML = years.map((y) => `<option value="${y}">${y}</option>`).join('');
+            const min = `${Math.min(...years)}-01-01`, max = `${Math.max(...years) + 1}-12-31`;
+            ['budgetFromDate', 'budgetToDate'].forEach((id) => { $(id).min = min; $(id).max = max; });
+        }
+
+        $('budgetFromDate').addEventListener('change', () => {
+            const f = $('budgetFromDate').value, t = $('budgetToDate');
+            if (f) { t.min = f; if (t.value && t.value < f) t.value = ''; }
+        });
+
+        /* =====================================================================
+           STACKED MODALS (reason modal on top of the budget modal)
+           ===================================================================== */
+        document.addEventListener('show.bs.modal', (e) => {
+            const open = document.querySelectorAll('.modal.show').length;
+            const z = 1055 + 20 * open;
+            e.target.style.zIndex = z;
+            setTimeout(() => {
+                const bds = document.querySelectorAll('.modal-backdrop');
+                if (bds.length) bds[bds.length - 1].style.zIndex = z - 5;
+            });
+        });
+        document.addEventListener('hidden.bs.modal', () => {
+            if (document.querySelectorAll('.modal.show').length) document.body.classList.add('modal-open');
+        });
+
+        document.addEventListener('DOMContentLoaded', renderListing);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eConnect ERP | Elite Nexus V6.2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --sidebar-w: 240px;
+            --primary-hex: #0061ff;
+            --primary-gradient: linear-gradient(135deg, #0061ff 0%, #60a5fa 100%);
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --surface-100: #ffffff;
+            --surface-200: #f8fafc;
+            --surface-300: #f1f5f9;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--surface-200);
+            color: var(--text-main);
+            font-size: 0.8rem; /* Reduced base font */
+            margin: 0;
+            overflow: hidden;
+            letter-spacing: -0.01em;
+        }
+
+        #sidebar {
+            width: var(--sidebar-w);
+            height: 100vh;
+            position: fixed;
+            background: #020617;
+            z-index: 2000;
+        }
+
+        .nav-item-elite {
+            color: #94a3b8;
+            padding: 8px 14px;
+            border-radius: 6px;
+            margin: 2px 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+
+        .nav-item-elite:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .nav-item-elite.active { background: var(--primary-gradient); color: #fff; }
+
+        #main-wrapper {
+            margin-left: var(--sidebar-w);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-header { background: var(--surface-100); border-bottom: 1px solid var(--border-light); }
+        
+        /* Compact Command Bar */
+        .command-bar { 
+            background: var(--surface-300); 
+            border: 1px solid var(--border-light); 
+            border-radius: 8px; 
+            padding: 4px 10px; 
+            display: flex; 
+            align-items: center; 
+            width: 350px; 
+        }
+        .command-input { background: transparent; border: none; outline: none; width: 100%; font-size: 0.75rem; padding-left: 8px; }
+
+        .data-container { flex: 1; overflow: auto; background: #fff; }
+        
+        /* High Density Table */
+        .table-elite-v6 { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .table-elite-v6 thead th {
+            position: sticky;
+            top: 0;
+            background: var(--surface-200);
+            padding: 10px 0.75rem;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-light);
+            z-index: 10;
+            cursor: pointer;
+        }
+        .table-elite-v6 td { 
+            padding: 8px 0.75rem; 
+            border-bottom: 1px solid var(--surface-300); 
+            vertical-align: middle; 
+            font-size: 0.75rem;
+        }
+        .table-elite-v6 tbody tr:hover { background: #f1f7ff; }
+
+        .progress-micro { height: 4px; width: 60px; background: var(--surface-300); border-radius: 4px; overflow: hidden; display: flex; }
+
+        .btn-action { 
+            height: 32px; 
+            padding: 0 12px; 
+            border-radius: 6px; 
+            font-weight: 700; 
+            font-size: 0.7rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+        }
+        .btn-primary-elite { background: var(--primary-gradient); border: none; color: #fff; }
+        .btn-export { background: #fff; border: 1px solid var(--border-light); color: var(--text-main); }
+        .btn-export:hover { background: var(--surface-200); }
+
+        #filterDrawer { display: none; background: #f8fafc; padding: 1rem; border-bottom: 1px solid var(--border-light); }
+        
+        code.sap-ref {
+            background: #eef2ff;
+            color: #4338ca;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: 700;
+        }
+
+        .col-config-menu { font-size: 0.7rem; min-width: 180px; }
+    </style>
+</head>
+<body>
+
+    <aside id="sidebar">
+        <div class="p-3 mb-2">
+            <div class="d-flex align-items-center gap-2">
+                <div class="bg-primary p-1 rounded-2">
+                    <i class="bi bi-intersect text-white fs-6"></i>
+                </div>
+                <h5 class="text-white mb-0 fw-800 tracking-tight" style="font-size: 1rem;">NEXUS<span class="text-primary">.</span></h5>
+            </div>
+        </div>
+        <nav>
+            <a href="#" class="nav-item-elite"><i class="bi bi-pie-chart"></i> Overview</a>
+            <a href="#" class="nav-item-elite active"><i class="bi bi-cart"></i> Procurement</a>
+            <a href="#" class="nav-item-elite"><i class="bi bi-box-seam"></i> Inventory</a>
+            <a href="#" class="nav-item-elite"><i class="bi bi-person-gear"></i> Governance</a>
+        </nav>
+    </aside>
+
+    <div id="main-wrapper">
+        <header class="app-header">
+            <div class="px-3 py-2 d-flex align-items-center justify-content-between border-bottom">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="command-bar">
+                        <i class="bi bi-search text-muted" style="font-size: 0.7rem;"></i>
+                        <input type="text" class="command-input" placeholder="Quick search (Press /)...">
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-end d-none d-md-block">
+                        <div class="text-success fw-bold" style="font-size: 0.6rem;"><i class="bi bi-cpu"></i> SAP ACTIVE</div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=0061ff&color=fff" class="rounded-circle" width="28">
+                </div>
+            </div>
+
+            <div class="px-3 py-2 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <h6 class="mb-0 fw-800">Purchase Requisitions</h6>
+                    <span class="badge bg-light text-muted border fw-bold" style="font-size: 0.6rem;">1,482 Active</span>
+                </div>
+                
+                <div class="d-flex gap-2">
+                    <div class="dropdown">
+                        <button class="btn btn-action btn-light border dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                            <i class="bi bi-columns"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end shadow-lg col-config-menu" id="colToggler">
+                            <!-- Columns Load Here -->
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-action btn-light border" onclick="toggleFilters()">
+                        <i class="bi bi-filter"></i> Filters
+                    </button>
+
+                    <div class="vr mx-1"></div>
+
+                    <!-- Export Button -->
+                    <div class="dropdown">
+                        <button class="btn btn-action btn-export dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-download"></i> Export
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm col-config-menu">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-csv me-2"></i>Export as CSV</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-xlsx me-2"></i>Export as Excel</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-file-pdf me-2"></i>Export as PDF</a></li>
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-action btn-primary-elite">
+                        <i class="bi bi-plus-lg"></i> Create PR
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div id="filterDrawer">
+            <div class="row g-2">
+                <div class="col-md-2">
+                    <input type="text" class="form-control form-control-sm" placeholder="PR Reference...">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select form-select-sm">
+                        <option>Status: All</option>
+                        <option>Pending</option>
+                        <option>Approved</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-sm btn-dark w-100 fw-bold">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-container">
+            <table class="table-elite-v6" id="nexusTable">
+                <thead>
+                    <tr>
+                        <th width="30"><input type="checkbox" class="form-check-input"></th>
+                        <th onclick="handleSort('ref')">ID <i class="bi bi-arrow-down-up sort-indicator"></i></th>
+                        <th onclick="handleSort('item')">Material/Description <i class="bi bi-arrow-down-up sort-indicator"></i></th>
+                        <th onclick="handleSort('qty')">Qty <i class="bi bi-arrow-down-up sort-indicator"></i></th>
+                        <th onclick="handleSort('val')">Valuation (INR) <i class="bi bi-arrow-down-up sort-indicator"></i></th>
+                        <th onclick="handleSort('user')">Requestor <i class="bi bi-arrow-down-up sort-indicator"></i></th>
+                        <th onclick="handleSort('health')">Workflow <i class="bi bi-arrow-down-up sort-indicator"></i></th>
+                        <th onclick="handleSort('sap')">SAP Link <i class="bi bi-arrow-down-up sort-indicator"></i></th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+
+        <footer class="bg-white border-top px-3 d-flex align-items-center justify-content-between" style="height: 40px;">
+            <div class="text-muted" style="font-size: 0.65rem;">Elite Nexus v6.2 Platinum | Build 2026.05</div>
+            <nav>
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item active"><a class="page-link border-0 py-1" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link border-0 py-1 text-dark" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link border-0 py-1 text-dark" href="#"><i class="bi bi-chevron-right"></i></a></li>
+                </ul>
+            </nav>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let prData = [];
+        for (let i = 1; i <= 35; i++) {
+            prData.push({
+                ref: 5000 + i,
+                item: `High-Precision Valve Mod-${i}`,
+                category: 'Mechanical • Spares',
+                qty: i + 5,
+                val: i * 12000,
+                user: 'A. Karmakar',
+                dept: 'OPS',
+                health: (i % 4 + 1),
+                isApproved: (i % 4 === 3),
+                sap: `SAP-100${i}`
+            });
+        }
+
+        let currentSort = { key: null, asc: true };
+        let hiddenCols = new Set();
+        const columnNames = ["Select", "Reference", "Material", "Quantity", "Valuation", "User", "Status", "SAP ID", "Actions"];
+
+        function renderNexusTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = prData.map(row => `
+                <tr>
+                    <td><input type="checkbox" class="form-check-input"></td>
+                    <td><span class="fw-800 text-primary">#${row.ref}</span></td>
+                    <td>
+                        <div class="fw-bold">${row.item}</div>
+                        <div class="text-muted" style="font-size: 0.6rem;">${row.category}</div>
+                    </td>
+                    <td class="fw-bold">${row.qty}</td>
+                    <td class="fw-800">₹${row.val.toLocaleString('en-IN')}</td>
+                    <td>
+                        <span class="fw-bold">${row.user}</span>
+                        <span class="text-muted ms-1" style="font-size: 0.6rem;">[${row.dept}]</span>
+                    </td>
+                    <td>
+                        <div class="progress-micro mb-1">
+                            <div style="width: ${row.health * 25}%; background: ${row.isApproved ? 'var(--accent-success)' : 'var(--accent-warning)'}"></div>
+                        </div>
+                        <span style="font-size: 0.6rem;" class="fw-bold text-uppercase">${row.isApproved ? 'Released' : 'Step ' + row.health}</span>
+                    </td>
+                    <td><code class="sap-ref">${row.sap}</code></td>
+                    <td class="text-end">
+                        <button class="btn btn-sm p-0 px-1 text-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm p-0 px-1 text-dark"><i class="bi bi-three-dots"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+            syncVisibility();
+        }
+
+        function handleSort(key) {
+            if (currentSort.key === key) currentSort.asc = !currentSort.asc;
+            else { currentSort.key = key; currentSort.asc = true; }
+            prData.sort((a, b) => {
+                let vA = a[key], vB = b[key];
+                if (typeof vA === 'string') return currentSort.asc ? vA.localeCompare(vB) : vB.localeCompare(vA);
+                return currentSort.asc ? vA - vB : vB - vA;
+            });
+            renderNexusTable();
+        }
+
+        function initColConfig() {
+            const container = document.getElementById('colToggler');
+            container.innerHTML = columnNames.map((name, i) => `
+                <div class="px-3 py-1">
+                    <label class="d-flex align-items-center gap-2"><input type="checkbox" checked onchange="toggleColumn(${i})" class="form-check-input"> ${name}</label>
+                </div>
+            `).join('');
+        }
+
+        function toggleColumn(index) {
+            if (hiddenCols.has(index)) hiddenCols.delete(index);
+            else hiddenCols.add(index);
+            syncVisibility();
+        }
+
+        function syncVisibility() {
+            const table = document.getElementById('nexusTable');
+            Array.from(table.rows).forEach(row => {
+                Array.from(row.cells).forEach((cell, idx) => {
+                    cell.style.display = hiddenCols.has(idx) ? 'none' : '';
+                });
+            });
+        }
+
+        function toggleFilters() {
+            const drawer = document.getElementById('filterDrawer');
+            drawer.style.display = drawer.style.display === 'block' ? 'none' : 'block';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/') { e.preventDefault(); document.querySelector('.command-input').focus(); }
+        });
+
+        initColConfig();
+        renderNexusTable();
+    </script>
+</body>
+</html>

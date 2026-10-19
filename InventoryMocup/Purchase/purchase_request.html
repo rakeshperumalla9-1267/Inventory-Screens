@@ -1,0 +1,1075 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>eConnect | Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common.css" />
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+    <div id="sidebar-placeholder"></div>
+    <div id="header-placeholder"></div>
+    <main id="main-wrapper">
+        <div class="sticky-header px-3 py-2 mb-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="fw-bold mb-1">Purchase Request</h6>
+                    <p class="navp mb-0">
+                        Initiate and track material or service procurement requests within
+                        the system.
+                    </p>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <button class="btn btn-light">
+                        <i class="bi bi-download me-2 text-primary"></i>Export
+                    </button>
+                    <button class="btn btn-premium px-4" data-bs-toggle="modal" data-bs-target="#workOrderModal">
+                        <i class="bi bi-plus-lg me-2"></i>New PR
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dcard mb-2">
+            <div class="row g-3">
+                <div class="fw-bold text-dark">
+                    <i class="bi bi-funnel me-2"></i>Filters:
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">PR Number</label>
+                    <input type="text" class="form-control" placeholder="Enter PR Number" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">Purchase Type</label>
+                    <select class="form-select">
+                        <option>All Types</option>
+                        <option>Asset</option>
+                        <option>Material</option>
+                        <option>Service</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">Approval Status</label>
+                    <select class="form-select">
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Posted to SAP">Posted to SAP</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">From Date</label>
+                    <input type="date" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">To Date</label>
+                    <input type="date" class="form-control" />
+                </div>
+                <div class="col-md-12 d-flex justify-content-end gap-2">
+                    <button class="btn btn-light">
+                        <i class="bi bi-arrow-clockwise me-2 text-secondary"></i>
+                        Clear
+                    </button>
+
+                    <button class="btn btn-premium">
+                        <i class="bi bi-funnel-fill me-2"></i>
+                        Filter
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th><i class="bi bi-hash me-2"></i>PR Number</th>
+
+                        <th>Primary Item</th>
+                        <th>Purchase Type</th>
+                        <th>Total Value</th>
+                        <th>Approval Status</th>
+                        <th>Requested By</th>
+                        <th>Requested On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row-alert-warning">
+                        <td class="fw-bold text-dark">
+                            <div class="dropdown d-flex align-items-center">
+                                <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <!-- VIEW -->
+                                    <li>
+                                        <span class="d-inline-block w-100" data-bs-toggle="tooltip"
+                                            data-bs-placement="right" title="View">
+                                            <a class="dropdown-item d-flex align-items-center gap-2">
+                                                <i class="bi bi-eye text-primary"></i> View
+                                            </a>
+                                        </span>
+                                    </li>
+
+                                    <!-- REVIEW / APPROVE -->
+                                    <li>
+                                        <span class="d-inline-block w-100" data-bs-toggle="tooltip"
+                                            data-bs-placement="right" title="Edit">
+                                            <a class="dropdown-item d-flex align-items-center gap-2"
+                                                data-bs-toggle="modal" data-bs-target="#workOrderModal">
+                                                <i class="bi bi-pencil-square text-secondary"></i>
+                                                Edit
+                                            </a>
+                                        </span>
+                                    </li>
+                                </ul>
+
+                                <span class="ms-2">PR-2026-0042</span>
+                            </div>
+                        </td>
+
+                        <td>Cisco Catalyst 9200L Switch</td>
+                        <td>Asset</td>
+                        <td>
+                            <div class="fw-bold text-primary">₹4,500.00</div>
+                        </td>
+                        <td><span class="status pending">Pending</span></td>
+                        <td>Stores Executor (000037)</td>
+                        <td>14/04/2025, 12:13 PM</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="p-4 bg-light bg-opacity-50 border-top d-flex justify-content-between align-items-center">
+                <span class="small text-muted">Showing 1 to 10 of 1,284 entries</span>
+                <nav>
+                    <ul class="pagination pagination-sm m-0">
+                        <li class="page-item disabled">
+                            <a class="page-link border-0 rounded-3" href="#">Prev</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link border-0 rounded-3 mx-1" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link border-0 rounded-3 mx-1" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link border-0 rounded-3" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="workOrderModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable modal-full-height">
+            <div class="modal-content">
+                <div class="modal-header p-3">
+                    <div class="d-flex flex-column">
+                        <h4 class="modal-title fw-bold mb-0">New Purchase Request</h4>
+                        <span class="small text-muted">Draft No. <span class="fw-bold" id="prNo">PR-2026-00842</span></span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="wo-content">
+
+                        <ul class="nav nav-tabs mb-3 custom-tabs">
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#detailsTabPR" title="Details">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    <span class="tab-label">Details</span>
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#approversTabPR" title="Approvers">
+                                    <i class="fa fa-users"></i>
+                                    <span class="tab-label">Approvers</span>
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <!-- ============ DETAILS ============ -->
+                            <div class="tab-pane fade show active" id="detailsTabPR">
+
+                                <!-- Requested by (locked) -->
+                                <div class="dcard">
+                                    <div class="section-tag-line">
+                                        <span class="section-label"><i class="bi bi-lock-fill me-1"></i>Requested By — Locked to Session</span>
+                                        <div class="section-hr"></div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label small fw-bold">User ID</label>
+                                            <input type="text" class="form-control sap-input" value="R. Venkatesh (EMP10234)" readonly />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small fw-bold">Department</label>
+                                            <input type="text" class="form-control sap-input" value="Engineering &amp; Maintenance" readonly />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small fw-bold">Plant</label>
+                                            <input type="text" class="form-control sap-input" value="ML11 — Chennai Plant 1" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- PR Classification -->
+                                <div class="dcard mt-3">
+                                    <div class="section-tag-line">
+                                        <span class="section-label">PR Classification</span>
+                                        <div class="section-hr"></div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">PR Type <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="prType">
+                                                <option value="">Select PR type</option>
+                                                <option value="Asset">Asset</option>
+                                                <option value="Non-Asset">Non-Asset</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Sub Type <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="subType" disabled>
+                                                <option value="">Select PR type first</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Purchase Group <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="purchaseGroup" disabled>
+                                                <option value="">Select sub type first</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">GxP Relevant <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="gxpRelevant">
+                                                <option value="">Select</option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold">Classification <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="classification" disabled>
+                                                <option value="">Select purchase group first</option>
+                                            </select>
+                                            <div class="small text-primary mt-1" id="classificationHint" style="display:none;"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold">Justification <span class="text-danger">*</span></label>
+                                            <textarea class="form-control" id="justification" rows="1"
+                                                placeholder="Enter justification (e.g., stock shortage, new requirement, replacement, project need)"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Checklist Execution -->
+                                <div class="dcard mt-3">
+                                    <div class="section-tag-line">
+                                        <span class="section-label">Checklist Execution</span>
+                                        <div class="section-hr"></div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Checklist Type</label>
+                                            <select class="form-select" id="checklistType">
+                                                <option value="">Select type</option>
+                                                <option value="Purchase Group">Purchase Group</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="form-label small fw-bold">Checklist Name</label>
+                                            <select class="form-select" id="checklistName" disabled>
+                                                <option value="">Select type first</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-end gap-2">
+                                            <button class="btn btn-premium w-50" type="button" id="checklistSearchBtn">
+                                                <i class="bi bi-search me-1"></i>Search
+                                            </button>
+                                            <button class="btn btn-light w-50" type="button" id="checklistClearBtn">
+                                                <i class="bi bi-x-lg me-1"></i>Clear
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3" id="checklistResult" style="display:none;">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <strong class="small" id="checklistResultTitle">Checklist</strong>
+                                            <button class="btn btn-sm btn-outline-danger border-0" type="button" id="checklistRemoveBtn">
+                                                <i class="bi bi-trash3"></i> Remove
+                                            </button>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm align-middle mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:5%">S.No</th>
+                                                        <th style="width:30%">Task / Instruction</th>
+                                                        <th style="width:12%">Photo?</th>
+                                                        <th style="width:20%">Observation</th>
+                                                        <th style="width:15%">Team</th>
+                                                        <th style="width:18%">Executed By</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="checklistTaskBody"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Attachments -->
+                                <div class="dcard mt-3">
+                                    <div class="section-tag-line">
+                                        <span class="section-label">Attachments</span>
+                                        <div class="section-hr"></div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-8">
+                                            <label class="form-label small fw-bold">Upload supporting documents</label>
+                                            <input type="file" class="form-control" id="headerAttachment" multiple>
+                                            <div class="form-text">Quotations, specification sheets, vendor comparisons, approval emails, etc.</div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <ul class="list-group" id="attachmentList">
+                                                <li class="list-group-item small text-muted">No files uploaded yet.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Line items -->
+                                <div class="dcard mt-3" id="itemsCard" style="display:none;">
+                                    <div class="section-tag-line">
+                                        <span class="section-label" id="itemsSectionLabel">Material Line Items</span>
+                                        <div class="section-hr"></div>
+                                    </div>
+
+                                    <div class="field-group-title-pr">Budget</div>
+                                    <div class="row g-2 mb-2">
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Budget Category <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-sm" id="itemBudgetCategory">
+                                                <option value="">Select category</option>
+                                                <option value="CAPEX">CAPEX (Capital)</option>
+                                                <option value="OPEX">OPEX (Revenue)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Ref Budget ID <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-sm" id="itemRefBudgetId" disabled>
+                                                <option value="">Select category first</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Available Budget</label>
+                                            <input type="text" class="form-control form-control-sm bg-light" id="itemAvailableBudget" readonly placeholder="Auto">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Balance Budget</label>
+                                            <input type="text" class="form-control form-control-sm bg-light" id="itemBalanceBudget" readonly placeholder="Auto">
+                                        </div>
+                                    </div>
+
+                                    <div class="field-group-title-pr">Material</div>
+                                    <div class="row g-2 align-items-end mb-2">
+                                        <div class="col-md-2">
+                                            <label class="form-label small fw-bold" id="codeLabel">Material Code</label>
+                                            <input type="text" class="form-control form-control-sm" id="matCode" list="matCodeList" placeholder="e.g. MAT-1001">
+                                            <datalist id="matCodeList"></datalist>
+                                            <div class="small" id="matHint"></div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label small fw-bold" id="descLabel">Description</label>
+                                            <input type="text" class="form-control form-control-sm bg-light" id="matDesc" readonly placeholder="Auto">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label small fw-bold" id="groupLabel">Material Group</label>
+                                            <input type="text" class="form-control form-control-sm bg-light" id="matGroup" readonly placeholder="Auto">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="form-label small fw-bold">Qty</label>
+                                            <input type="number" class="form-control form-control-sm" id="itemQty" min="1" value="1">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="form-label small fw-bold">UOM</label>
+                                            <input type="text" class="form-control form-control-sm bg-light" id="itemUom" readonly placeholder="Auto">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="form-label small fw-bold">Price</label>
+                                            <input type="number" class="form-control form-control-sm" id="itemPrice" min="0" step="0.01" placeholder="0.00">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="form-label small fw-bold">Per</label>
+                                            <input type="number" class="form-control form-control-sm" id="itemPer" min="1" value="1">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label small fw-bold">Currency</label>
+                                            <select class="form-select form-select-sm" id="itemCurrency">
+                                                <option value="INR" selected>INR</option>
+                                                <option value="USD">USD</option>
+                                                <option value="EUR">EUR</option>
+                                                <option value="GBP">GBP</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-2 align-items-end mb-3">
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Req. Delivery Date</label>
+                                            <input type="date" class="form-control form-control-sm" id="itemDelivery">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Storage Location</label>
+                                            <select class="form-select form-select-sm" id="itemStorage">
+                                                <option value="">Select storage location</option>
+                                                <option>SL01 – Main Store</option>
+                                                <option>SL02 – Engineering Store</option>
+                                                <option>SL03 – QC Lab Store</option>
+                                                <option>SL04 – Production Store</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Asset Code <span id="assetCodeReq" class="text-muted fw-normal">(optional)</span></label>
+                                            <input type="text" class="form-control form-control-sm" id="itemAssetCode" placeholder="e.g. AST-00456">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Internal Order <span id="intOrderReq" class="text-muted fw-normal">(optional)</span></label>
+                                            <input type="text" class="form-control form-control-sm" id="itemIntOrder" placeholder="e.g. IO-2026-0031">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end mb-3">
+                                        <button class="btn btn-premium px-4" type="button" id="addLineBtn">
+                                            <i class="bi bi-plus-lg me-2"></i>Add Line Item
+                                        </button>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-sm align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Budget</th>
+                                                    <th id="colCodeHeader">Material Code</th>
+                                                    <th id="colDescHeader">Description</th>
+                                                    <th>Qty</th>
+                                                    <th>UOM</th>
+                                                    <th>Price / Per</th>
+                                                    <th>Curr.</th>
+                                                    <th>Delivery</th>
+                                                    <th>Storage Loc.</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="linesBody"></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="text-muted small py-2" id="emptyNote">No line items added yet.</div>
+                                </div>
+
+                                <div class="alert alert-light border small mb-0 d-flex align-items-center" id="itemsLockedNote">
+                                    <i class="bi bi-lock-fill me-2 text-muted"></i>
+                                    Complete PR Type, Sub Type, Purchase Group and Classification above to add line items.
+                                </div>
+
+                            </div>
+
+                            <!-- ============ APPROVERS ============ -->
+                            <div class="tab-pane fade" id="approversTabPR">
+                                <div class="dcard">
+                                    <div class="section-tag-line">
+                                        <span class="section-label">Multi-level Approval Workflow</span>
+                                        <div class="section-hr"></div>
+                                    </div>
+
+                                    <div class="alert alert-light border small text-center py-4" id="approversEmpty">
+                                        Select <strong>GxP Relevant</strong> in PR Classification to determine the approval chain for this PR.
+                                    </div>
+
+                                    <div id="approversContent" style="display:none;">
+                                        <div class="alert alert-light border small mb-3" id="approversLevelNote"></div>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm align-middle mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:8%">Level</th>
+                                                        <th>Approver Role</th>
+                                                        <th>Approver</th>
+                                                        <th style="width:15%">Status</th>
+                                                        <th style="width:18%">Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="approversBody"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="alert alert-light border small mt-3 mb-0">
+                                            <i class="bi bi-info-circle me-2 text-primary"></i>
+                                            Approval levels are determined automatically based on Purchase Group, Request Value and GxP relevance. Once all levels approve, this PR is posted to SAP automatically as a purchase requisition.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <div class="small text-muted" id="footerLineCount">0 line items</div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-outline-primary" id="saveDraftBtn">Save as Draft</button>
+                        <button type="button" class="btn btn-premium" id="saveSubmitBtn" disabled>
+                            Save and Submit <i class="bi bi-send-fill ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ---------- reference data ---------- */
+        const SUB_TYPES = ["Material", "Service"];
+
+        const PURCHASE_GROUPS = {
+            "Asset": ["PG-01 Engineering", "PG-03 Quality / Lab", "PG-05 IT & Infrastructure", "PG-06 Facilities"],
+            "Non-Asset": ["PG-02 Production", "PG-03 Quality / Lab", "PG-04 Admin & Housekeeping", "PG-06 Facilities"]
+        };
+
+        const CLASSIFICATION = {
+            "Asset|Material": {
+                options: ["Equipment / Asset"],
+                examples: { "Equipment / Asset": "Examples: HPLC machine, Manufacturing equipment, New laboratory equipment" }
+            },
+            "Asset|Service": {
+                options: ["Service related to the asset"],
+                examples: { "Service related to the asset": "Examples: Equipment installation or qualification service" }
+            },
+            "Non-Asset|Material": {
+                options: ["Spares & Change Parts", "Consumables", "Lab Chemicals", "Lab Items"],
+                examples: {
+                    "Spares & Change Parts": "Examples: Punches & dies, change parts, machinery spares, vehicle spares",
+                    "Consumables": "Examples: Lubricating oil & grease, stationery, uniforms & laundry, water",
+                    "Lab Chemicals": "Examples: Reagents, HPLC-grade solvents, titration chemicals",
+                    "Lab Items": "Examples: Glassware, general lab consumable items"
+                }
+            },
+            "Non-Asset|Service": {
+                options: ["General Services"],
+                examples: { "General Services": "Examples: AMC charges, repair & maintenance service, housekeeping service" }
+            }
+        };
+
+        // Mock budget master — Ref Budget IDs and their available amounts, keyed by category
+        const BUDGET_LINES = {
+            "CAPEX": { "ML11BEF0001": 500000, "ML11BEF0002": 250000 },
+            "OPEX": { "ML11BEF0101": 140000, "ML11BEF0102": 95000 }
+        };
+
+        // Mock checklist master
+        const CHECKLIST_NAMES = {
+            "Purchase Group": ["Quality & Procurement Compliance Verification", "Purchase Requisition Compliance Checklist"]
+        };
+        const CHECKLIST_TASKS = {
+            "Quality & Procurement Compliance Verification": [
+                { task: "Vendor qualification status verified", photo: "No" },
+                { task: "Quotation compared against at least 2 vendors", photo: "No" },
+                { task: "Technical specification matches requirement", photo: "Yes" }
+            ],
+            "Purchase Requisition Compliance Checklist": [
+                { task: "Unique item / asset identification confirmed", photo: "No" },
+                { task: "Budget availability verified against request", photo: "No" },
+                { task: "Vendor recommendation supported with justification", photo: "Yes" }
+            ]
+        };
+
+        // Mock "Unnati database" material master
+        const MATERIAL_MASTER = {
+            "MAT-1001": { desc: "HPLC Machine, Model XR-200", group: "Lab Equipments", uom: "Nos" },
+            "MAT-1002": { desc: "5 HP Centrifugal Pump Motor", group: "Machinery / Motor", uom: "Nos" },
+            "MAT-1003": { desc: "UPS System – 10 KVA", group: "UPS System", uom: "Nos" },
+            "MAT-2001": { desc: "Lubricating Oil & Grease", group: "Consumables", uom: "Litre" },
+            "MAT-2002": { desc: "Punches & Dies – Set B", group: "Spares & Change Part", uom: "Set" },
+            "MAT-2003": { desc: "Acetonitrile, HPLC Grade", group: "Lab Chemicals", uom: "Litre" },
+            "MAT-2004": { desc: "Measuring Cups – 500 ml", group: "Spares & Change Part", uom: "Nos" }
+        };
+
+        // Mock service master — used whenever Sub Type = Service
+        const SERVICE_MASTER = {
+            "SRV-1001": { desc: "Equipment Installation Service", group: "Service", uom: "Nos" },
+            "SRV-1002": { desc: "Equipment Qualification Service (IQ/OQ/PQ)", group: "Service", uom: "Nos" },
+            "SRV-2001": { desc: "AMC – Preventive Maintenance", group: "General Services", uom: "Nos" },
+            "SRV-2002": { desc: "Housekeeping Service – Monthly", group: "General Services", uom: "Nos" },
+            "SRV-2003": { desc: "Repair & Maintenance Service", group: "General Services", uom: "Nos" }
+        };
+
+        const formatINR = (val) => '₹' + Number(val || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        /* ---------- element refs ---------- */
+        const prType = document.getElementById('prType');
+        const subType = document.getElementById('subType');
+        const purchaseGroup = document.getElementById('purchaseGroup');
+        const classification = document.getElementById('classification');
+        const classificationHint = document.getElementById('classificationHint');
+        const gxpRelevant = document.getElementById('gxpRelevant');
+
+        /* ---------- Approvers (driven by GxP Relevant) ---------- */
+        const APPROVAL_LEVELS = {
+            "No": [
+                { role: "Reporting Manager", name: "K. Sundaram" },
+                { role: "Department Head", name: "S. Priya" }
+            ],
+            "Yes": [
+                { role: "Reporting Manager", name: "K. Sundaram" },
+                { role: "Department Head", name: "S. Priya" },
+                { role: "QA / Compliance Approver", name: "Dr. N. Lakshmi" },
+                { role: "Finance Approver", name: "M. Anand" },
+                { role: "Plant Head", name: "R. Kumaran" }
+            ]
+        };
+
+        const approversEmpty = document.getElementById('approversEmpty');
+        const approversContent = document.getElementById('approversContent');
+        const approversLevelNote = document.getElementById('approversLevelNote');
+        const approversBody = document.getElementById('approversBody');
+
+        function renderApprovers() {
+            const gxp = gxpRelevant.value;
+            if (!gxp) {
+                approversEmpty.style.display = 'block';
+                approversContent.style.display = 'none';
+                return;
+            }
+            const levels = APPROVAL_LEVELS[gxp];
+            approversLevelNote.innerHTML = '<i class="bi bi-info-circle me-2 text-primary"></i>' +
+                (gxp === 'Yes'
+                    ? 'GxP Relevant = Yes — this PR requires ' + levels.length + ' levels of approval, including QA / Compliance sign-off.'
+                    : 'GxP Relevant = No — this PR requires ' + levels.length + ' levels of approval.');
+            approversBody.innerHTML = levels.map((lvl, i) => `
+                <tr>
+                    <td class="fw-bold">${i + 1}</td>
+                    <td>${lvl.role}</td>
+                    <td>${lvl.name}</td>
+                    <td><span class="status pending">Pending</span></td>
+                    <td>—</td>
+                </tr>
+            `).join('');
+            approversEmpty.style.display = 'none';
+            approversContent.style.display = 'block';
+        }
+        gxpRelevant.addEventListener('change', renderApprovers);
+
+        const justification = document.getElementById('justification');
+
+        const itemsCard = document.getElementById('itemsCard');
+        const itemsLockedNote = document.getElementById('itemsLockedNote');
+        const itemsSectionLabel = document.getElementById('itemsSectionLabel');
+
+        let classificationValue = '';
+        let currentMaster = MATERIAL_MASTER;
+
+        function fillSelect(sel, options, placeholder) {
+            sel.innerHTML = '';
+            const ph = document.createElement('option');
+            ph.value = ''; ph.textContent = placeholder;
+            sel.appendChild(ph);
+            options.forEach(o => {
+                const opt = document.createElement('option');
+                opt.value = o; opt.textContent = o;
+                sel.appendChild(opt);
+            });
+        }
+
+        function lockItems() {
+            itemsCard.style.display = 'none';
+            itemsLockedNote.style.display = 'flex';
+        }
+        function unlockItems() {
+            itemsCard.style.display = 'block';
+            itemsLockedNote.style.display = 'none';
+        }
+
+        function setItemFieldMode(subTypeVal) {
+            const isService = subTypeVal === 'Service';
+            currentMaster = isService ? SERVICE_MASTER : MATERIAL_MASTER;
+
+            itemsSectionLabel.textContent = isService ? 'Service Line Items' : 'Material Line Items';
+            document.getElementById('codeLabel').textContent = isService ? 'Service Code' : 'Material Code';
+            document.getElementById('descLabel').textContent = isService ? 'Service Text' : 'Description';
+            document.getElementById('groupLabel').textContent = isService ? 'Service Group' : 'Material Group';
+            document.getElementById('colCodeHeader').textContent = isService ? 'Service Code' : 'Material Code';
+            document.getElementById('colDescHeader').textContent = isService ? 'Service Text' : 'Description';
+
+            matCode.placeholder = isService ? 'e.g. SRV-1001' : 'e.g. MAT-1001';
+            matCodeList.innerHTML = Object.keys(currentMaster).map(c => `<option value="${c}">`).join('');
+            matCode.value = ''; matDesc.value = ''; matGroup.value = ''; itemUom.value = ''; matHint.textContent = '';
+        }
+
+        /* ---- PR Type ---- */
+        prType.addEventListener('change', () => {
+            subType.innerHTML = '<option value="">Select PR type first</option>'; subType.disabled = true;
+            purchaseGroup.innerHTML = '<option value="">Select sub type first</option>'; purchaseGroup.disabled = true;
+            classification.innerHTML = '<option value="">Select purchase group first</option>'; classification.disabled = true;
+            classificationHint.style.display = 'none';
+            classificationValue = '';
+            lockItems();
+            updateAssetFieldRequirement();
+
+            if (prType.value) {
+                fillSelect(subType, SUB_TYPES, 'Select sub type');
+                subType.disabled = false;
+            }
+            refreshSaveState();
+        });
+
+        // Asset PRs must record an Asset Code and Internal Order per line; Non-Asset PRs leave both optional.
+        const assetCodeReq = document.getElementById('assetCodeReq');
+        const intOrderReq = document.getElementById('intOrderReq');
+        function updateAssetFieldRequirement() {
+            const isAsset = prType.value === 'Asset';
+            assetCodeReq.textContent = isAsset ? '*' : '(optional)';
+            assetCodeReq.className = isAsset ? 'text-danger fw-bold' : 'text-muted fw-normal';
+            intOrderReq.textContent = isAsset ? '*' : '(optional)';
+            intOrderReq.className = isAsset ? 'text-danger fw-bold' : 'text-muted fw-normal';
+        }
+
+        /* ---- Sub Type ---- */
+        subType.addEventListener('change', () => {
+            purchaseGroup.innerHTML = '<option value="">Select sub type first</option>'; purchaseGroup.disabled = true;
+            classification.innerHTML = '<option value="">Select purchase group first</option>'; classification.disabled = true;
+            classificationHint.style.display = 'none';
+            classificationValue = '';
+            lockItems();
+
+            if (subType.value) {
+                fillSelect(purchaseGroup, PURCHASE_GROUPS[prType.value], 'Select purchase group');
+                purchaseGroup.disabled = false;
+                setItemFieldMode(subType.value);
+            }
+            refreshSaveState();
+        });
+
+        /* ---- Purchase Group ---- */
+        purchaseGroup.addEventListener('change', () => {
+            classification.innerHTML = '<option value="">Select classification</option>'; classification.disabled = true;
+            classificationHint.style.display = 'none';
+            classificationValue = '';
+            lockItems();
+
+            if (purchaseGroup.value) {
+                const key = prType.value + '|' + subType.value;
+                const conf = CLASSIFICATION[key];
+                fillSelect(classification, conf.options, 'Select classification');
+                classification.disabled = false;
+                if (conf.options.length === 1) {
+                    classification.value = conf.options[0];
+                    classification.dispatchEvent(new Event('change'));
+                }
+            }
+            refreshSaveState();
+        });
+
+        /* ---- Classification ---- */
+        classification.addEventListener('change', () => {
+            classificationValue = classification.value;
+            const key = prType.value + '|' + subType.value;
+            const conf = CLASSIFICATION[key];
+            if (classification.value && conf) {
+                classificationHint.textContent = conf.examples[classification.value] || '';
+                classificationHint.style.display = 'block';
+                unlockItems();
+            } else {
+                classificationHint.style.display = 'none';
+                lockItems();
+            }
+            refreshSaveState();
+        });
+
+        /* ---------- Checklist execution ---------- */
+        const checklistType = document.getElementById('checklistType');
+        const checklistName = document.getElementById('checklistName');
+        const checklistSearchBtn = document.getElementById('checklistSearchBtn');
+        const checklistClearBtn = document.getElementById('checklistClearBtn');
+        const checklistResult = document.getElementById('checklistResult');
+        const checklistResultTitle = document.getElementById('checklistResultTitle');
+        const checklistTaskBody = document.getElementById('checklistTaskBody');
+        const checklistRemoveBtn = document.getElementById('checklistRemoveBtn');
+
+        checklistType.addEventListener('change', () => {
+            checklistName.innerHTML = '<option value="">Select type first</option>';
+            checklistName.disabled = true;
+            if (checklistType.value) {
+                fillSelect(checklistName, CHECKLIST_NAMES[checklistType.value], 'Select checklist');
+                checklistName.disabled = false;
+            }
+        });
+
+        checklistSearchBtn.addEventListener('click', () => {
+            if (!checklistType.value || !checklistName.value) {
+                alert('Select a checklist type and name first');
+                return;
+            }
+            const tasks = CHECKLIST_TASKS[checklistName.value] || [];
+            checklistResultTitle.textContent = checklistName.value;
+            checklistTaskBody.innerHTML = tasks.map((t, i) => `
+                <tr>
+                    <td class="text-center fw-bold">${i + 1}</td>
+                    <td>${t.task}</td>
+                    <td class="text-center">${t.photo}</td>
+                    <td><input type="text" class="form-control form-control-sm" placeholder="Enter observation"></td>
+                    <td><input type="text" class="form-control form-control-sm" placeholder="Team"></td>
+                    <td><input type="text" class="form-control form-control-sm" placeholder="Name"></td>
+                </tr>
+            `).join('');
+            checklistResult.style.display = 'block';
+        });
+
+        checklistClearBtn.addEventListener('click', () => {
+            checklistType.value = '';
+            checklistName.innerHTML = '<option value="">Select type first</option>';
+            checklistName.disabled = true;
+            checklistResult.style.display = 'none';
+        });
+
+        checklistRemoveBtn.addEventListener('click', () => {
+            checklistResult.style.display = 'none';
+        });
+
+        /* ---------- Attachments ---------- */
+        const headerAttachment = document.getElementById('headerAttachment');
+        const attachmentList = document.getElementById('attachmentList');
+        let attachedFiles = [];
+
+        function renderAttachments() {
+            if (attachedFiles.length === 0) {
+                attachmentList.innerHTML = '<li class="list-group-item small text-muted">No files uploaded yet.</li>';
+                return;
+            }
+            attachmentList.innerHTML = attachedFiles.map((f, i) => `
+                <li class="list-group-item d-flex justify-content-between align-items-center small">
+                    <span><i class="bi bi-file-earmark-text me-2 text-primary"></i>${f.name}</span>
+                    <span>
+                        <span class="text-muted me-3">${(f.size / 1024).toFixed(1)} KB</span>
+                        <button class="btn btn-sm btn-outline-danger border-0 rm-attach" data-idx="${i}" type="button">
+                            <i class="bi bi-trash3"></i>
+                        </button>
+                    </span>
+                </li>
+            `).join('');
+        }
+
+        headerAttachment.addEventListener('change', () => {
+            Array.from(headerAttachment.files).forEach(f => attachedFiles.push(f));
+            headerAttachment.value = '';
+            renderAttachments();
+        });
+
+        attachmentList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.rm-attach');
+            if (btn) {
+                attachedFiles.splice(Number(btn.getAttribute('data-idx')), 1);
+                renderAttachments();
+            }
+        });
+
+        /* ---------- Budget (per line item) ---------- */
+        const itemBudgetCategory = document.getElementById('itemBudgetCategory');
+        const itemRefBudgetId = document.getElementById('itemRefBudgetId');
+        const itemAvailableBudget = document.getElementById('itemAvailableBudget');
+        const itemBalanceBudget = document.getElementById('itemBalanceBudget');
+
+        function consumedForBudget(refId) {
+            return lines.filter(l => l.refBudgetId === refId)
+                .reduce((s, l) => s + (Number(l.price) || 0) * (Number(l.qty) || 0), 0);
+        }
+
+        function updateItemBudgetDisplay() {
+            const cat = itemBudgetCategory.value;
+            const ref = itemRefBudgetId.value;
+            if (!cat || !ref) {
+                itemAvailableBudget.value = '';
+                itemBalanceBudget.value = '';
+                return;
+            }
+            const available = BUDGET_LINES[cat][ref];
+            const balance = available - consumedForBudget(ref);
+            itemAvailableBudget.value = formatINR(available);
+            itemBalanceBudget.value = formatINR(balance);
+        }
+
+        itemBudgetCategory.addEventListener('change', () => {
+            itemRefBudgetId.innerHTML = '<option value="">Select category first</option>';
+            itemRefBudgetId.disabled = true;
+            itemAvailableBudget.value = '';
+            itemBalanceBudget.value = '';
+            if (itemBudgetCategory.value) {
+                fillSelect(itemRefBudgetId, Object.keys(BUDGET_LINES[itemBudgetCategory.value]), 'Select Ref Budget ID');
+                itemRefBudgetId.disabled = false;
+            }
+        });
+        itemRefBudgetId.addEventListener('change', updateItemBudgetDisplay);
+
+        /* ---------- material / service code lookup ---------- */
+        const matCodeList = document.getElementById('matCodeList');
+        const matCode = document.getElementById('matCode');
+        const matDesc = document.getElementById('matDesc');
+        const matGroup = document.getElementById('matGroup');
+        const itemUom = document.getElementById('itemUom');
+        const matHint = document.getElementById('matHint');
+
+        matCode.addEventListener('input', () => {
+            const rec = currentMaster[matCode.value.trim().toUpperCase()];
+            if (rec) {
+                matDesc.value = rec.desc;
+                matGroup.value = rec.group;
+                itemUom.value = rec.uom;
+                matHint.textContent = 'Found in Unnati database';
+                matHint.className = 'small text-success';
+            } else {
+                matDesc.value = ''; matGroup.value = ''; itemUom.value = '';
+                matHint.textContent = matCode.value.trim() ? 'Not found in Unnati database' : '';
+                matHint.className = 'small text-danger';
+            }
+        });
+
+        /* ---------- line items ---------- */
+        const linesBody = document.getElementById('linesBody');
+        const emptyNote = document.getElementById('emptyNote');
+        const footerLineCount = document.getElementById('footerLineCount');
+        const addLineBtn = document.getElementById('addLineBtn');
+        let lines = [];
+        let seq = 1;
+
+        function renderLines() {
+            emptyNote.style.display = lines.length ? 'none' : 'block';
+            linesBody.innerHTML = lines.map(l => `
+                <tr>
+                    <td class="fw-bold">${l.refBudgetId}</td>
+                    <td>${l.matCode}</td>
+                    <td>${l.desc}</td>
+                    <td>${l.qty}</td>
+                    <td>${l.uom}</td>
+                    <td>${l.price} / ${l.per}</td>
+                    <td>${l.currency}</td>
+                    <td>${l.delivery || '—'}</td>
+                    <td>${l.storage || '—'}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-outline-danger btn-sm border-0 rm" data-id="${l.id}">
+                            <i class="bi bi-trash3"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+            const count = lines.length;
+            footerLineCount.textContent = count + (count === 1 ? ' line item' : ' line items');
+            updateItemBudgetDisplay();
+            refreshSaveState();
+        }
+
+        addLineBtn.addEventListener('click', () => {
+            const code = matCode.value.trim();
+            const rec = currentMaster[code.toUpperCase()];
+            const qty = document.getElementById('itemQty').value;
+            const price = document.getElementById('itemPrice').value;
+            const storage = document.getElementById('itemStorage').value;
+            const delivery = document.getElementById('itemDelivery').value;
+            const budgetCategory = itemBudgetCategory.value;
+            const refBudgetId = itemRefBudgetId.value;
+            const codeLabel = subType.value === 'Service' ? 'Service' : 'Material';
+
+            if (!budgetCategory || !refBudgetId) { alert('Select a Budget Category and Ref Budget ID for this item'); itemBudgetCategory.focus(); return; }
+            if (!code || !rec) { alert('Enter a valid ' + codeLabel + ' Code from the Unnati database'); matCode.focus(); return; }
+            if (!qty || qty <= 0) { alert('Enter a quantity'); return; }
+            if (!price) { alert('Enter a price'); return; }
+            if (!storage) { alert('Select a storage location'); return; }
+            if (!delivery) { alert('Enter a required delivery date'); return; }
+            if (prType.value === 'Asset') {
+                if (!document.getElementById('itemAssetCode').value.trim()) { alert('Asset Code is mandatory for Asset PRs'); document.getElementById('itemAssetCode').focus(); return; }
+                if (!document.getElementById('itemIntOrder').value.trim()) { alert('Internal Order is mandatory for Asset PRs'); document.getElementById('itemIntOrder').focus(); return; }
+            }
+
+            const lineValue = Number(price) * Number(qty);
+            const balance = BUDGET_LINES[budgetCategory][refBudgetId] - consumedForBudget(refBudgetId);
+            if (lineValue > balance) { alert('This line exceeds the balance available on ' + refBudgetId); return; }
+
+            lines.push({
+                id: seq++,
+                budgetCategory, refBudgetId,
+                matCode: code.toUpperCase(),
+                desc: rec.desc, group: rec.group,
+                qty, uom: rec.uom, price,
+                per: document.getElementById('itemPer').value || 1,
+                currency: document.getElementById('itemCurrency').value,
+                delivery, storage,
+                assetCode: document.getElementById('itemAssetCode').value.trim(),
+                intOrder: document.getElementById('itemIntOrder').value.trim(),
+                prType: prType.value, subType: subType.value, classification: classificationValue
+            });
+
+            matCode.value = ''; matDesc.value = ''; matGroup.value = ''; itemUom.value = ''; matHint.textContent = '';
+            document.getElementById('itemQty').value = 1;
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('itemPer').value = 1;
+            document.getElementById('itemStorage').value = '';
+            document.getElementById('itemDelivery').value = '';
+            document.getElementById('itemAssetCode').value = '';
+            document.getElementById('itemIntOrder').value = '';
+
+            renderLines();
+        });
+
+        linesBody.addEventListener('click', (e) => {
+            const btn = e.target.closest('.rm');
+            if (btn) {
+                lines = lines.filter(l => String(l.id) !== btn.getAttribute('data-id'));
+                renderLines();
+            }
+        });
+
+        const saveDraftBtn = document.getElementById('saveDraftBtn');
+        const saveSubmitBtn = document.getElementById('saveSubmitBtn');
+
+        function refreshSaveState() {
+            const classified = !!classificationValue;
+            const justified = justification.value.trim().length > 0;
+            const gxpSet = !!gxpRelevant.value;
+            saveSubmitBtn.disabled = !(classified && justified && gxpSet && lines.length > 0);
+        }
+        justification.addEventListener('input', refreshSaveState);
+        gxpRelevant.addEventListener('change', refreshSaveState);
+
+        saveDraftBtn.addEventListener('click', () => {
+            alert('Requisition ' + document.getElementById('prNo').textContent + ' saved as draft');
+            bootstrap.Modal.getInstance(document.getElementById('workOrderModal'))?.hide();
+        });
+
+        saveSubmitBtn.addEventListener('click', () => {
+            alert('Requisition ' + document.getElementById('prNo').textContent + ' saved and submitted for multi-level approval');
+            bootstrap.Modal.getInstance(document.getElementById('workOrderModal'))?.hide();
+        });
+    </script>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../sidebar.js"></script>
+    <script src="../header.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,191 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eConnect | Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../common.css" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+  <div id="sidebar-placeholder"></div>
+  <div id="header-placeholder"></div>
+
+  <main id="main-wrapper">
+    <div class="sticky-header px-3 py-2 mb-2">
+      <div class="d-flex justify-content-between align-items-center">
+     <div class="d-flex gap-3">
+          <button class="btn btn-light">
+            <i class="bi bi-download me-2 text-primary"></i>Export
+          </button>
+          <!-- <button class="btn btn-premium px-4">
+                        <i class="bi bi-plus-lg me-2"></i>New Material
+                    </button> -->
+        </div>
+      </div>
+    </div>
+<html>
+<head>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f6f8fb;
+    margin:20px;
+    color:#243447;
+}
+.card{
+    background:white;
+    border:1px solid #ddd;
+    padding:20px;
+    border-radius:6px;
+    margin-bottom:20px;
+}
+h2{
+    color:#0b4a8b;
+}
+.filters{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:15px;
+}
+input,select{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+button{
+    padding:10px 25px;
+    border-radius:5px;
+    border:0;
+    cursor:pointer;
+}
+.search{
+    background:#0787c9;
+    color:white;
+}
+.clear{
+    background:#eee;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th{
+    background:#f0f2f5;
+    color:#17365d;
+}
+th,td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    text-align:left;
+}
+.export{
+    float:right;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Stock Summary Report</h2>
+
+<div class="card">
+
+<div class="filters">
+
+<div>
+<label>Plant *</label>
+<select>
+<option>ML11</option>
+</select>
+</div>
+
+<div>
+<label>Warehouse</label>
+<select>
+<option>Select Warehouse</option>
+</select>
+</div>
+
+<div>
+<label>Category</label>
+<select>
+<option>Select Category</option>
+</select>
+</div>
+
+<div>
+<label>Material Code</label>
+<input placeholder="Enter Material Code">
+</div>
+
+<div>
+<label>As On Date</label>
+<input type="date">
+</div>
+
+</div>
+
+<br>
+
+<div class="button-group">
+    <button class="clear">Clear</button>
+    <button class="search">🔍 Search</button>
+</div>
+
+
+<div class="card">
+
+<!-- <button class="export">Export ▼</button> -->
+<input placeholder="Search..." style="width:250px;float:right">
+
+
+<table>
+
+<tr>
+<th>Material Code</th>
+<th>Material Name</th>
+<th>Category</th>
+<th>Warehouse</th>
+<th>UOM</th>
+<th>Qty Available</th>
+<th>Unit Cost</th>
+<th>Stock Value</th>
+</tr>
+
+
+<tr>
+<td>GM001</td>
+<td>Cement Bag</td>
+<td>General Materials</td>
+<td>Main Store</td>
+<td>Bag</td>
+<td>80</td>
+<td>₹380</td>
+<td>₹30,400</td>
+</tr>
+
+<tr>
+<td>OSE015</td>
+<td>Cleaning Chemical</td>
+<td>OSE</td>
+<td>HK Store</td>
+<td>Litre</td>
+<td>120</td>
+<td>₹250</td>
+<td>₹30,000</td>
+</tr>
+
+</table>
+
+</div>
+
+</body>

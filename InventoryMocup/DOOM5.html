@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eConnect ERP | Elite High-Density V5</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --sidebar-w: 240px;
+            --layer-1-h: 58px;
+            --layer-2-h: 54px;
+            --primary-blue: #0061ff;
+            --surface-bg: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--surface-bg);
+            color: #1e293b;
+            font-size: 0.82rem;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #sidebar {
+            width: var(--sidebar-w);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #0f172a;
+            z-index: 2000;
+        }
+
+        #main-wrapper {
+            margin-left: var(--sidebar-w);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header Stack --- */
+        .sticky-header-stack {
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1500;
+        }
+
+        .layer-1 {
+            height: var(--layer-1-h);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .layer-2 {
+            height: var(--layer-2-h);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+        }
+
+        /* --- Elite Filter Drawer --- */
+        #advancedFilters {
+            display: none;
+            background: #ffffff;
+            border-bottom: 2px solid var(--primary-blue);
+            padding: 1.25rem 1.5rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            animation: slideDown 0.25s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* --- Fixed Table Architecture --- */
+        .table-scroll-area {
+            flex: 1;
+            overflow-y: scroll;
+            padding: 0;
+            /* Full bleed for cleaner look */
+            background: #fff;
+        }
+
+        .table-erp-elite {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table-erp-elite thead th {
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            z-index: 100;
+            padding: 10px 1rem;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #475569;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .table-erp-elite tbody td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        .table-erp-elite tbody tr:hover {
+            background-color: #f1f5f9;
+            cursor: pointer;
+        }
+
+        /* --- UI Elements --- */
+        .btn-elite {
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 0.45rem 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .search-pill {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 4px 12px;
+            width: 320px;
+            transition: all 0.2s;
+        }
+
+        .search-pill:focus-within {
+            background: #fff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 97, 255, 0.1);
+        }
+
+        .workflow-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        /* --- Pagination Footer --- */
+        .pagination-footer {
+            height: 52px;
+            background: #fff;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside id="sidebar">
+        <div class="py-4">
+            <div class="px-4 mb-4 d-flex align-items-center">
+                <div class="bg-primary p-2 rounded me-2">
+                    <i class="bi bi-intersect text-white"></i>
+                </div>
+                <h5 class="text-white mb-0 fw-bold">eConnect<span class="text-primary">.</span></h5>
+            </div>
+            <nav class="nav flex-column px-2">
+                <a href="#" class="nav-link text-white-50 small mb-1 p-2 rounded hover-bg-dark"><i
+                        class="bi bi-grid-1x2 me-2"></i> Dashboard</a>
+                <a href="#" class="nav-link text-white fw-bold small mb-1 p-2 rounded bg-primary"><i
+                        class="bi bi-bag-check me-2"></i> Procurement</a>
+                <a href="#" class="nav-link text-white-50 small mb-1 p-2 rounded"><i class="bi bi-box-seam me-2"></i>
+                    Inventory</a>
+            </nav>
+        </div>
+    </aside>
+
+    <div id="main-wrapper">
+        <div class="sticky-header-stack">
+            <!-- Top Bar -->
+            <div class="layer-1">
+                <div class="search-pill d-flex align-items-center">
+                    <i class="bi bi-search text-muted me-2"></i>
+                    <input type="text" class="border-0 bg-transparent shadow-none w-100 small"
+                        placeholder="Search materials, PRs, or SAP IDs...">
+                </div>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="vr" style="height: 20px;"></div>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">SAP LIVE</span>
+                    <div class="d-flex align-items-center gap-2 border-start ps-3">
+                        <img src="https://ui-avatars.com/api/?name=JS&background=0061ff&color=fff" class="rounded"
+                            width="28">
+                        <span class="fw-bold small">J. Sharma</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Actions & Integrated Filter Button -->
+            <div class="layer-2">
+                <div class="d-flex align-items-center">
+                    <h6 class="mb-0 fw-bold me-3">Purchase Requests</h6>
+                    <span class="text-muted small border-start ps-3">1,482 total records</span>
+                </div>
+
+                <div class="d-flex gap-2 align-items-center">
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border fw-bold text-muted dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                            <i class="bi bi-layout-three-columns me-1"></i> Columns
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-columns shadow border-0">
+                            <h6 class="dropdown-header px-0 mb-2">Show/Hide Columns</h6>
+                            <div id="columnToggles">
+                                <!-- JS Injected -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Filters moved before Export -->
+                    <button class="btn btn-elite btn-light border" onclick="toggleFilters()">
+                        <i class="bi bi-sliders"></i> Advanced Filters
+                    </button>
+
+                    <div class="vr mx-1" style="height: 20px;"></div>
+
+                    <button class="btn btn-elite btn-outline-secondary">
+                        <i class="bi bi-file-earmark-arrow-down"></i> Export
+                    </button>
+                    <button class="btn btn-elite btn-primary">
+                        <i class="bi bi-plus-lg"></i> New PR
+                    </button>
+                </div>
+            </div>
+
+            <!-- Drawer Space Utilized -->
+            <div id="advancedFilters">
+                <div class="row g-3">
+                    <div class="col-md-2">
+                        <label class="form-label text-muted fw-bold" style="font-size: 0.65rem;">DEPARTMENT</label>
+                        <select class="form-select form-select-sm border-0 bg-light">
+                            <option>All Depts</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label text-muted fw-bold" style="font-size: 0.65rem;">SAP STATUS</label>
+                        <select class="form-select form-select-sm border-0 bg-light">
+                            <option>All Status</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label text-muted fw-bold" style="font-size: 0.65rem;">PRIORITY</label>
+                        <div class="d-flex gap-1">
+                            <input type="checkbox" class="btn-check" id="p1" autocomplete="off"><label
+                                class="btn btn-outline-danger btn-sm" for="p1">P1</label>
+                            <input type="checkbox" class="btn-check" id="p2" autocomplete="off"><label
+                                class="btn btn-outline-warning btn-sm" for="p2">P2</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted fw-bold" style="font-size: 0.65rem;">DATE RANGE</label>
+                        <div class="input-group input-group-sm">
+                            <input type="date" class="form-control border-0 bg-light">
+                            <input type="date" class="form-control border-0 bg-light">
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end gap-2">
+                        <button class="btn btn-sm btn-primary px-4 fw-bold">Search</button>
+                        <button class="btn btn-sm btn-link text-muted" onclick="toggleFilters()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrollable High-Density Table -->
+        <div class="table-scroll-area">
+            <table class="table-erp-elite">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" class="form-check-input"></th>
+                        <th>Reference</th>
+                        <th>Material Description</th>
+                        <th>Quantity</th>
+                        <th>Value</th>
+                        <th>Requestor</th>
+                        <th>Status Chain</th>
+                        <th>SAP Link</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <script>
+                        for (let i = 1; i <= 40; i++) {
+                            const status = (i % 4) + 1;
+                            document.write(`
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td><span class="fw-bold text-primary">PR-26-${1000 + i}</span></td>
+                                    <td>
+                                        <div class="fw-bold">Material Item #${i}</div>
+                                        <div class="text-muted" style="font-size: 0.7rem;">Category: Spares • HSN: 8481</div>
+                                    </td>
+                                    <td><span class="badge bg-light text-dark">${i * 5} Units</span></td>
+                                    <td class="fw-bold">₹${(i * 1250).toLocaleString()}</td>
+                                    <td>
+                                        <div class="small fw-medium">User_Alpha_${i}</div>
+                                        <div class="text-muted" style="font-size: 0.7rem;">Maintenance</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-1 mb-1">
+                                            <div style="height:4px; width:15px; border-radius:4px; background:${status >= 1 ? '#10b981' : '#e2e8f0'}"></div>
+                                            <div style="height:4px; width:15px; border-radius:4px; background:${status >= 2 ? '#10b981' : '#e2e8f0'}"></div>
+                                            <div style="height:4px; width:15px; border-radius:4px; background:${status >= 3 ? '#10b981' : '#e2e8f0'}"></div>
+                                            <div style="height:4px; width:15px; border-radius:4px; background:${status >= 4 ? '#10b981' : '#e2e8f0'}"></div>
+                                        </div>
+                                        <span class="text-uppercase fw-bold" style="font-size:0.6rem; color:${status == 4 ? '#10b981' : '#f59e0b'}">
+                                            ${status == 4 ? 'Fully Approved' : 'Level ' + status + ' Pending'}
+                                        </span>
+                                    </td>
+                                    <td><code class="small text-primary">1000${4500 + i}</code></td>
+                                    <td class="text-end">
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-light border"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-light border"><i class="bi bi-three-dots"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `);
+                        }
+                    </script>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sticky Footer -->
+        <div class="pagination-footer shadow-lg">
+            <div class="d-flex align-items-center gap-4">
+                <span class="text-muted small">Showing 1 - 40 of 1,482</span>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="small text-muted">Rows:</span>
+                    <select class="form-select form-select-sm border-0 bg-light fw-bold" style="width: 70px;">
+                        <option>40</option>
+                        <option>100</option>
+                    </select>
+                </div>
+            </div>
+
+            <nav>
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item"><a class="page-link border-0 text-dark" href="#"><i
+                                class="bi bi-chevron-left"></i></a></li>
+                    <li class="page-item active"><a class="page-link border-0 bg-primary" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link border-0 text-dark" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link border-0 text-dark" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link border-0 text-dark" href="#"><i
+                                class="bi bi-chevron-right"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script>
+        function toggleFilters() {
+            const f = document.getElementById('advancedFilters');
+            f.style.display = (f.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+</body>
+
+</html>

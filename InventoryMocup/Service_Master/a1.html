@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eConnect | Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../common.css" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+  <div id="sidebar-placeholder"></div>
+  <div id="header-placeholder"></div>
+  <main id="main-wrapper">
+    <div class="sticky-header px-3 py-2 mb-2">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <nav class="breadcrumb mb-0">
+            <h5 class="fw-bold mb-0">Service Master</h5>
+          </nav>
+        </div>
+        <div class="d-flex gap-3">
+          <button class="btn btn-light">
+            <i class="bi bi-download me-2 text-primary"></i>Export
+          </button>
+          <button class="btn btn-premium px-4" data-bs-toggle="modal" data-bs-target="#editServiceModal">
+            <i class="bi bi-plus-lg me-2"></i>New Service
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="stat-card d-flex align-items-center">
+                    <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3"><i class="bi bi-cpu-fill"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-bold">System Status</div>
+                        <div class="fw-bold text-success">SAP Synced</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card d-flex align-items-center">
+                    <div class="stat-icon bg-dark bg-opacity-10 text-dark me-3"><i class="bi bi-briefcase"></i></div>
+                    <div>
+                        <div class="text-muted small fw-bold">Active Contracts</div>
+                        <div class="fw-bold">142 Services</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card d-flex align-items-center">
+                    <div class="stat-icon bg-info bg-opacity-10 text-info me-3"><i class="bi bi-people"></i></div>
+                    <div>
+                        <div class="text-muted small fw-bold">Total Vendors</div>
+                        <div class="fw-bold">28 Approved</div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+    <div class="dcard mb-2">
+      <div class="row g-3">
+        <div class="fw-bold text-dark">
+          <i class="bi bi-funnel me-2"></i>Filters:
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label small fw-bold text-muted">Global Search</label>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search text-muted"></i></span>
+            <input type="text" class="form-control border-start-0" placeholder="ID, Description, Purchase Group,..." />
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label small fw-bold text-muted">Approval Status</label>
+          <select class="form-select">
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label small fw-bold text-muted">Status</label>
+          <select class="form-select">
+            <option value="All">All</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label small fw-bold text-muted">From Date</label>
+          <input type="date" class="form-control" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small fw-bold text-muted">To Date</label>
+          <input type="date" class="form-control" />
+        </div>
+        <div class="col-md-12 d-flex justify-content-end gap-2">
+          <button class="btn btn-light">
+            <i class="bi bi-arrow-clockwise me-2 text-secondary"></i>
+            Clear
+          </button>
+
+          <button class="btn btn-premium">
+            <i class="bi bi-funnel-fill me-2"></i>
+            Filter
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>Service ID</th>
+            <th>Description</th>
+            <th>Purchase Group</th>
+            <th>Price</th>
+            <th>Vendors</th>
+            <!-- <th class="text-center">Action</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="fw-bold text-dark">
+              <div class="dropdown d-flex align-items-center">
+                <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                  <!-- VIEW -->
+                  <li>
+                    <span class="d-inline-block w-100" data-bs-toggle="tooltip" data-bs-placement="right" title="View">
+                      <a class="dropdown-item d-flex align-items-center gap-2">
+                        <i class="bi bi-eye text-primary"></i> View
+                      </a>
+                    </span>
+                  </li>
+
+                  <!-- REVIEW / APPROVE -->
+                  <li>
+                    <span class="d-inline-block w-100" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit">
+                      <a class="dropdown-item d-flex align-items-center gap-2" data-bs-toggle="modal"
+                        data-bs-target="#editServiceModal">
+                        <i class="bi bi-pencil-square text-secondary"></i>
+                        Edit
+                      </a>
+                    </span>
+                  </li>
+
+                  <!-- ACTIVATE (DISABLED EXAMPLE) -->
+                  <!-- <li>
+                    <span class="d-inline-block w-100" data-bs-toggle="tooltip" data-bs-placement="right"
+                      title="Activate">
+                      <a class="dropdown-item d-flex align-items-center gap-2" tabindex="-1" aria-disabled="true">
+                        <i class="bi bi-check-circle text-success"></i>
+                        Activate
+                      </a>
+                    </span>
+                  </li> -->
+
+                  <!-- DEACTIVATE (DISABLED EXAMPLE) -->
+                  <!-- <li>
+                    <span class="d-inline-block w-100" data-bs-toggle="tooltip" data-bs-placement="right"
+                      title="Deactivate">
+                      <a class="dropdown-item d-flex align-items-center gap-2" tabindex="-1" aria-disabled="true">
+                        <i class="bi bi-x-circle text-danger"></i> Deactivate
+                      </a>
+                    </span>
+                  </li> -->
+
+                  <!-- PRINT -->
+                  <!-- <li>
+                                        <span class="d-inline-block w-100" data-bs-toggle="tooltip"
+                                            data-bs-placement="right"
+                                            title="Print is enabled only for Completed work orders">
+                                            <a class="dropdown-item d-flex align-items-center gap-2 disabled"
+                                                tabindex="-1" aria-disabled="true">
+                                                <i class="bi bi-printer text-dark"></i> Print
+                                            </a>
+                                        </span>
+                                    </li> -->
+                </ul>
+
+                <span class="ms-2">SRV-2024-901</span>
+              </div>
+            </td>
+            <td>Industrial Calibration - Level 1</td>
+            <td>
+              <span class="badge bg-light text-dark border px-3">TECH-PG</span>
+            </td>
+            <td class="fw-bold text-primary">₹ 12,400.00</td>
+            <td>
+              <span
+                class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3">3
+                Vendors Attached</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="p-4 bg-light bg-opacity-50 border-top d-flex justify-content-between align-items-center">
+        <span class="small text-muted">Showing 1 to 10 of 1,284 entries</span>
+        <nav>
+          <ul class="pagination pagination-sm m-0">
+            <li class="page-item disabled">
+              <a class="page-link border-0 rounded-3" href="#">Prev</a>
+            </li>
+            <li class="page-item active">
+              <a class="page-link border-0 rounded-3 mx-1" href="#">1</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link border-0 rounded-3 mx-1" href="#">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link border-0 rounded-3" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal fade" id="editServiceModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header p-3">
+          <div class="d-flex align-items-center">
+            <h4 class="modal-title fw-bold">Create New Service Master</h4>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="wo-content">
+            <div class="sticky-tabs-container">
+              <!-- MAIN TABS -->
+              <ul class="nav nav-tabs mb-2 custom-tabs">
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#details" title="Details">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span class="tab-label">Details</span>
+                  </button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="pill" data-bs-target="#files" title="Attachments">
+                    <i class="fa-solid fa-paperclip"></i>
+                    <span class="tab-label">Attachments</span>
+                  </button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#approvers" title="Approvers">
+                    <i class="fa fa-users"></i>
+                    <span class="tab-label">Approvers</span>
+                  </button>
+                </li>
+
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#audit" title="Audit Log">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span class="tab-label">Audit Log</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div class="tab-content">
+              <!-- REQUEST -->
+              <div class="tab-pane fade show active" id="details">
+                <div class="">
+                  <div class="row g-4">
+                    <div class="col-12">
+                      <div class="dcard">
+                        <div class="mb-2">
+                          <span class="section-tag">Section 1: SAP Service Master (Locked)</span>
+                        </div>
+                        <div class="row g-3">
+                          <div class="col-md-3">
+                            <label class="form-label fw-bold">Service Code</label>
+                            <div class="input-group input-group-sm">
+                              <span class="input-group-text bg-white border-end-0"><i
+                                  class="bi bi-lock-fill small"></i></span>
+                              <input type="text" class="form-control sap-lock border-start-0" value="SRV-2024-901"
+                                readonly />
+                            </div>
+                          </div>
+                          <div class="col-md-9">
+                            <label class="form-label fw-bold">Short Description</label>
+                            <input type="text" class="form-control form-control-sm sap-lock"
+                              value="Industrial Calibration - Level 1 Precision Testing" readonly />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-8">
+                      <div class="p-4 border rounded-4 bg-white shadow-sm h-100">
+                        <div class="mb-2">
+                          <span class="section-tag">Section 2: Detailed Parameters</span>
+                        </div>
+
+                        <div class="mb-4">
+                          <label class="form-label fw-bold">Long Description</label>
+                          <textarea class="form-control" rows="8"
+                            placeholder="Enter full technical scope of work, safety requirements, and deliverables..."></textarea>
+                        </div>
+
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <label class="form-label fw-bold">Purchase Group</label>
+                            <select class="form-select">
+                              <option selected>
+                                TECH-PG (Technical Services)
+                              </option>
+                              <option>MANT-PG (Maintenance)</option>
+                              <option>EXT-PG (External Experts)</option>
+                            </select>
+                          </div>
+                          <div class="col-md-6">
+                            <label class="form-label fw-bold">Estimated Price (Standard)</label>
+                            <div class="input-group">
+                              <span class="input-group-text bg-light fw-bold border-end-0">₹</span>
+                              <input type="number" class="form-control border-start-0 fw-bold" value="12400.00" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="row g-4">
+                        <div class="col-12">
+                          <div class="p-4 border rounded-4 bg-white shadow-sm">
+                            <div class="mb-2">
+                              <span class="section-tag">Section 3: Vendors</span>
+                            </div>
+                            <label class="form-label small fw-bold d-block mb-2">Associated Suppliers</label>
+
+                            <div class="d-flex flex-column gap-2 mb-2">
+                              <div class="vendor-pill">
+                                <span>TATA Metrology</span>
+                                <i class="bi bi-x-circle ms-auto text-muted"></i>
+                              </div>
+                              <div class="vendor-pill">
+                                <span>Precision Labs Pvt Ltd</span>
+                                <i class="bi bi-x-circle ms-auto text-muted"></i>
+                              </div>
+                            </div>
+
+                            <div class="input-group input-group-sm">
+                              <input type="text" class="form-control" placeholder="Search vendor name..." />
+                              <button class="btn btn-dark">
+                                <i class="bi bi-plus-lg"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="files">
+                <div class="card-box">
+                  <div class="card-header">Attachments</div>
+                  <div class="card-body">
+                    <div class="row g-2 align-items-end">
+                      <!-- Attachment Type -->
+                      <div class="col-lg-3 col-md-6">
+                        <label class="form-label small text-muted">Attachment Type</label>
+                        <select class="form-select">
+                          <option selected disabled>Select type</option>
+                          <option>📄 Document</option>
+                          <option>🖼️ Image</option>
+                          <option>🔗 URL</option>
+                        </select>
+                      </div>
+
+                      <!-- Description -->
+                      <div class="col-lg-3 col-md-6">
+                        <label class="form-label small text-muted">Description</label>
+                        <input type="text" class="form-control" placeholder="Max 100 characters" />
+                      </div>
+
+                      <!-- File / URL -->
+                      <div class="col-lg-5 col-md-8">
+                        <label class="form-label small text-muted">File / URL</label>
+                        <input type="file" class="form-control" />
+                      </div>
+
+                      <!-- Add Button -->
+                      <div class="col-lg-1 col-md-4 text-end">
+                        <button class="btn btn-premium btn-sm w-100">
+                          <i class="bi bi-plus-circle"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <small class="text-muted d-block mt-2">
+                      <i class="bi bi-info-circle me-1"></i>
+                      Maximum total upload size: 25 MB
+                    </small>
+
+                    <div class="table-responsive mt-3">
+                      <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                          <tr>
+                            <th width="20%">Type</th>
+                            <th width="25%">Description</th>
+                            <th width="35%">File / URL</th>
+                            <th width="10%">Size</th>
+                            <th width="10%" class="text-center">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Document -->
+                          <tr>
+                            <td>
+                              <i class="bi bi-file-earmark-text text-primary"></i>
+                              Document
+                            </td>
+                            <td class="text-truncate" title="Maintenance SOP document">
+                              Maintenance SOP document
+                            </td>
+                            <td>
+                              <a href="#" class="text-decoration-none">
+                                <i class="bi bi-file-earmark-pdf text-danger me-1"></i>
+                                SOP_Maintenance.pdf
+                              </a>
+                            </td>
+                            <td class="text-center">1.2 MB</td>
+                            <td class="text-center">
+                              <button class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+
+                          <!-- Image -->
+                          <tr>
+                            <td>
+                              <i class="bi bi-image text-success"></i> Image
+                            </td>
+                            <td>Equipment condition photo</td>
+                            <td>
+                              <a href="#">
+                                <i class="bi bi-image me-1"></i>
+                                motor_photo.jpg
+                              </a>
+                            </td>
+                            <td class="text-center">450 KB</td>
+                            <td class="text-center">
+                              <button class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+
+                          <!-- URL -->
+                          <tr>
+                            <td>
+                              <i class="bi bi-link-45deg text-secondary"></i>
+                              URL
+                            </td>
+                            <td>External safety SOP</td>
+                            <td>
+                              <a href="https://example.com" target="_blank" class="text-decoration-none">
+                                <i class="bi bi-box-arrow-up-right me-1"></i>
+                                https://example.com
+                              </a>
+                            </td>
+                            <td class="text-center">NA</td>
+                            <td class="text-center">
+                              <button class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="approvers">
+                <table class="table table-sm">
+                  <tr>
+                    <th>Approval Level</th>
+                    <th>Department</th>
+                    <th>Team Name</th>
+                    <th>Team Member</th>
+                  </tr>
+
+                  <tr>
+                    <td>1</td>
+                    <td>Engineering</td>
+                    <td>Engineering Review Team</td>
+                    <td>Vikram (000007)</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div class="tab-pane fade" id="audit">
+                <table class="table table-hover table-bordered">
+                  <thead>
+                    <tr>
+                      <th rowspan="2" style="width: 10%">Action</th>
+                      <th rowspan="2" style="width: 10%; cursor: pointer">
+                        Done By
+                      </th>
+                      <th rowspan="2" style="width: 10%; cursor: pointer">
+                        Date & Time
+                      </th>
+                      <th colspan="3" class="bg-secondary text-white" style="width: 50%">
+                        Changes
+                      </th>
+                      <th rowspan="2" style="width: 10%">Reason</th>
+                      <th rowspan="2" style="width: 10%">Status</th>
+                    </tr>
+                    <tr class="table-secondary">
+                      <th style="width: 10%">Field</th>
+                      <th style="width: 15%">Old Value</th>
+                      <th style="width: 25%">New Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Example Row with Changes -->
+                    <tr>
+                      <td rowspan="2">Update</td>
+                      <td rowspan="2">John Doe</td>
+                      <td rowspan="2">2025-12-27 10:00 AM</td>
+                      <td>Username</td>
+                      <td>OldUser</td>
+                      <td>NewUser</td>
+                      <td rowspan="2">Corrected typo</td>
+                      <td rowspan="2">
+                        <span class="badge-status approved">
+                          <i class="bi bi-check-circle"></i> Approved
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Email</td>
+                      <td>old@example.com</td>
+                      <td>new@example.com</td>
+                    </tr>
+
+                    <!-- Example Row with No Changes -->
+                    <tr>
+                      <td>Created</td>
+                      <td>Jane Smith</td>
+                      <td>2025-12-26 09:30 AM</td>
+                      <td>NA</td>
+                      <td>NA</td>
+                      <td>NA</td>
+                      <td>Initial creation</td>
+                      <td>
+                        <span class="badge-status pending">
+                          <i class="bi bi-hourglass-split"></i> Pending
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-light px-4 fw-bold" data-bs-dismiss="modal">
+            Discard changes
+          </button>
+          <button type="button" class="btn btn-premium px-5">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../sidebar.js"></script>
+  <script src="../header.js"></script>
+</body>
+
+</html>

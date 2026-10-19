@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>eConnect | Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../common.css" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="pr_common.css" />
+</head>
+
+<body>
+    <div id="sidebar-placeholder"></div>
+    <div id="header-placeholder"></div>
+    <main id="main-wrapper">
+        <div class="sticky-header px-3 py-2 mb-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="fw-bold mb-1">Material Request</h6>
+                    <p class="navp mb-0">
+                        Initiate and track material procurement requests within the system.
+                    </p>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <button class="btn btn-light">
+                        <i class="bi bi-download me-2 text-primary"></i>Export
+                    </button>
+                    <button class="btn btn-premium px-4" data-bs-toggle="modal" data-bs-target="#workOrderModal">
+                        <i class="bi bi-plus-lg me-2"></i>New Material Request
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dcard mb-2">
+            <div class="row g-3">
+                <div class="fw-bold text-dark">
+                    <i class="bi bi-funnel me-2"></i>Filters:
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">PR Number</label>
+                    <input type="text" class="form-control" placeholder="Enter PR Number" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">Purchase Type</label>
+                    <select class="form-select">
+                        <option>All Types</option>
+                        <option>Asset</option>
+                        <option>Material</option>
+                        <option>Service</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">Approval Status</label>
+                    <select class="form-select">
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Posted to SAP">Posted to SAP</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">From Date</label>
+                    <input type="date" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">To Date</label>
+                    <input type="date" class="form-control" />
+                </div>
+                <div class="col-md-12 d-flex justify-content-end gap-2">
+                    <button class="btn btn-light">
+                        <i class="bi bi-arrow-clockwise me-2 text-secondary"></i>
+                        Clear
+                    </button>
+
+                    <button class="btn btn-premium">
+                        <i class="bi bi-funnel-fill me-2"></i>
+                        Filter
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th><i class="bi bi-hash me-2"></i>PR Number</th>
+
+                        <th>Primary Item</th>
+                        <th>Purchase Type</th>
+                        <th>Total Value</th>
+                        <th>Approval Status</th>
+                        <th>Requested By</th>
+                        <th>Requested On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row-alert-warning">
+                        <td class="fw-bold text-dark">
+                            <div class="dropdown d-flex align-items-center">
+                                <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <!-- VIEW -->
+                                    <li>
+                                        <span class="d-inline-block w-100" data-bs-toggle="tooltip"
+                                            data-bs-placement="right" title="View">
+                                            <a class="dropdown-item d-flex align-items-center gap-2">
+                                                <i class="bi bi-eye text-primary"></i> View
+                                            </a>
+                                        </span>
+                                    </li>
+
+                                    <!-- REVIEW / APPROVE -->
+                                    <li>
+                                        <span class="d-inline-block w-100" data-bs-toggle="tooltip"
+                                            data-bs-placement="right" title="Edit">
+                                            <a class="dropdown-item d-flex align-items-center gap-2"
+                                                data-bs-toggle="modal" data-bs-target="#workOrderModal">
+                                                <i class="bi bi-pencil-square text-secondary"></i>
+                                                Edit
+                                            </a>
+                                        </span>
+                                    </li>
+                                </ul>
+
+                                <span class="ms-2">PR-2026-0042</span>
+                            </div>
+                        </td>
+
+                        <td>Cisco Catalyst 9200L Switch</td>
+                        <td>Asset</td>
+                        <td>
+                            <div class="fw-bold text-primary">₹4,500.00</div>
+                        </td>
+                        <td><span class="status pending">Pending</span></td>
+                        <td>Stores Executor (000037)</td>
+                        <td>14/04/2025, 12:13 PM</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="p-4 bg-light bg-opacity-50 border-top d-flex justify-content-between align-items-center">
+                <span class="small text-muted">Showing 1 to 10 of 1,284 entries</span>
+                <nav>
+                    <ul class="pagination pagination-sm m-0">
+                        <li class="page-item disabled">
+                            <a class="page-link border-0 rounded-3" href="#">Prev</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link border-0 rounded-3 mx-1" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link border-0 rounded-3 mx-1" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link border-0 rounded-3" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="workOrderModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable modal-full-height">
+            <div class="modal-content">
+                <div class="modal-header p-3">
+                    <div class="d-flex flex-column">
+                        <h4 class="modal-title fw-bold mb-0">New Material Request</h4>
+                        <span class="small text-muted">Draft No. <span class="fw-bold" id="prNo">PR-2026-00842</span></span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="wo-content">
+
+                        <ul class="nav nav-tabs mb-3 custom-tabs">
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#headerDetailsTabPR" title="Header Details">
+                                    <i class="bi bi-card-heading"></i>
+                                    <span class="tab-label">Header Details</span>
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#materialDetailsTabPR" title="Material Details">
+                                    <i class="bi bi-boxes"></i>
+                                    <span class="tab-label">Material Details</span>
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#approversTabPR" title="Approvers">
+                                    <i class="fa fa-users"></i>
+                                    <span class="tab-label">Approvers</span>
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#auditLogTabPR" title="Audit Logs">
+                                    <i class="bi bi-clock-history"></i>
+                                    <span class="tab-label">Audit Logs</span>
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <!-- ============ HEADER DETAILS ============ -->
+                            <div class="tab-pane fade show active" id="headerDetailsTabPR">
+
+                                <!-- Requested by (locked) -->
+                                <div class="dcard">
+                                    <div class="section-tag-line">
+                                        <span class="section-label"><i class="bi bi-lock-fill me-1"></i>Requested By — Locked to Session</span>
+                                        <div class="section-hr"></div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label small fw-bold">User ID</label>
+                                            <input type="text" class="form-control sap-input" value="R. Venkatesh (EMP10234)" readonly />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small fw-bold">Department</label>
+                                            <input type="text" class="form-control sap-input" value="Engineering &amp; Maintenance" readonly />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small fw-bold">Plant</label>
+                                            <input type="text" class="form-control sap-input" value="ML11 — Chennai Plant 1" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- PR Classification -->
+                                <div class="dcard mt-3">
+                                    <div class="section-tag-line">
+                                        <span class="section-label">PR Classification</span>
+                                        <div class="section-hr"></div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">PR Type <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="prType">
+                                                <option value="">Select PR type</option>
+                                                <option value="Asset">Asset</option>
+                                                <option value="Non-Asset">Non-Asset</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Purchase Group <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="purchaseGroup" disabled>
+                                                <option value="">Select PR type first</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">GxP Relevant <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="gxpRelevant">
+                                                <option value="">Select</option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Budget Type <span class="text-muted fw-normal">(auto)</span></label>
+                                            <input type="text" class="form-control" id="budgetType" placeholder="Set by PR Type" disabled />
+                                            <div class="small text-muted mt-1">Asset → CAPEX only · Non-Asset → OPEX only</div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Classification <span class="text-danger">*</span></label>
+                                            <select class="form-select" id="classification" disabled>
+                                                <option value="">Select PR type first</option>
+                                            </select>
+                                            <div class="small text-primary mt-1" id="classificationHint" style="display:none;"></div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Currency</label>
+                                            <select class="form-select" id="currency" disabled>
+                                                <option value="INR" selected>INR</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-light border small mt-2 mb-0">
+                                    <i class="bi bi-info-circle me-2 text-primary"></i>
+                                    This is a <strong>Material Request</strong> — Sub Type is set to <strong>Material</strong> automatically, so it isn't asked here.
+                                </div>
+
+                                <!-- Checklist Execution (after Classification) -->
+                                <div class="dcard mt-3">
+                                    <div class="section-tag-line">
+                                        <span class="section-label">Checklist Execution</span>
+                                        <div class="section-hr"></div>
+                                        <span class="pr-set-badge std" id="checklistSetBadge">Select GxP Relevant first</span>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Checklist Type</label>
+                                            <select class="form-select" id="checklistType" disabled>
+                                                <option value="">Select type</option>
+                                                <option value="Purchase Group">Purchase Group</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="form-label small fw-bold">Checklist Name</label>
+                                            <select class="form-select" id="checklistName" disabled>
+                                                <option value="">Select type first</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-end">
+                                            <button class="btn btn-premium" type="button" id="checklistAddBtn" disabled>
+                                                <i class="bi bi-plus-lg me-1"></i>Add Checklist
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="small text-muted mt-2">
+                                        The checklist set depends on <strong>GxP Relevant</strong>. Adding a checklist opens it for execution; it is executed by you as the PR initiator.
+                                    </div>
+
+                                    <div class="small text-muted mt-3" id="hcEmpty">No checklist added yet.</div>
+                                    <div class="table-responsive mt-3" id="hcWrap" style="display:none;">
+                                        <table class="table table-sm align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:5%">S.No</th>
+                                                    <th>Checklist</th>
+                                                    <th style="width:14%">Type</th>
+                                                    <th style="width:20%">Result</th>
+                                                    <th style="width:12%">Status</th>
+                                                    <th style="width:15%">Executed On</th>
+                                                    <th style="width:9%"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="hcBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Justification (rich text) -->
+                                <div class="dcard mt-3">
+                                    <div class="section-tag-line">
+                                        <span class="section-label">Justification <span class="text-danger">*</span></span>
+                                        <div class="section-hr"></div>
+                                    </div>
+                                    <div class="rte">
+                                        <div class="rte-toolbar" id="rteToolbar">
+                                            <button type="button" data-cmd="bold" data-state title="Bold"><i class="bi bi-type-bold"></i></button>
+                                            <button type="button" data-cmd="italic" data-state title="Italic"><i class="bi bi-type-italic"></i></button>
+                                            <button type="button" data-cmd="underline" data-state title="Underline"><i class="bi bi-type-underline"></i></button>
+                                            <button type="button" data-cmd="strikeThrough" data-state title="Strikethrough"><i class="bi bi-type-strikethrough"></i></button>
+                                            <span class="rte-sep"></span>
+                                            <button type="button" data-cmd="insertUnorderedList" data-state title="Bulleted list"><i class="bi bi-list-ul"></i></button>
+                                            <button type="button" data-cmd="insertOrderedList" data-state title="Numbered list"><i class="bi bi-list-ol"></i></button>
+                                            <button type="button" data-cmd="outdent" title="Decrease indent"><i class="bi bi-text-indent-right"></i></button>
+                                            <button type="button" data-cmd="indent" title="Increase indent"><i class="bi bi-text-indent-left"></i></button>
+                                            <span class="rte-sep"></span>
+                                            <button type="button" data-cmd="createLink" title="Insert link"><i class="bi bi-link-45deg"></i></button>
+                                            <button type="button" data-cmd="removeFormat" title="Clear formatting"><i class="bi bi-eraser"></i></button>
+                                            <span class="rte-sep"></span>
+                                            <button type="button" data-cmd="undo" title="Undo"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                            <button type="button" data-cmd="redo" title="Redo"><i class="bi bi-arrow-clockwise"></i></button>
+                                        </div>
+                                        <div class="rte-body" id="justification" contenteditable="true"
+                                            data-placeholder="Enter justification (e.g., stock shortage, new requirement, replacement, project need)"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Attachments -->
+                                <div class="dcard mt-3">
+                                    <div class="section-tag-line">
+                                        <span class="section-label">Attachments</span>
+                                        <div class="section-hr"></div>
+                                        <span class="small text-muted" id="attachCount"></span>
+                                        <button type="button" class="btn btn-link btn-sm p-0 text-danger" id="attachClear" style="display:none;">Remove all</button>
+                                    </div>
+                                    <div class="pr-drop" id="attachDrop">
+                                        <i class="bi bi-cloud-arrow-up"></i>
+                                        <div class="fw-bold small mt-1">Click to choose files, or drag &amp; drop them here</div>
+                                        <div class="small text-muted">You can attach multiple files — quotations, specification sheets, vendor comparisons, approval emails, etc.</div>
+                                        <input type="file" id="headerAttachment" multiple hidden>
+                                    </div>
+                                    <ul class="list-group mt-3" id="attachmentList">
+                                        <li class="list-group-item small text-muted">No files uploaded yet.</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                            <!-- ============ MATERIAL DETAILS ============ -->
+                            <div class="tab-pane fade" id="materialDetailsTabPR">
+
+                                <div class="dcard" id="itemsCard" style="display:none;">
+                                    <div class="section-tag-line">
+                                        <span class="section-label" id="itemsSectionLabel">Material Line Items</span>
+                                        <div class="section-hr"></div>
+                                        <span class="small fw-bold text-primary" id="prTotal">Total: ₹0.00</span>
+                                    </div>
+
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Budget Type</label>
+                                            <input type="text" class="form-control form-control-sm" id="itemsBudgetType" disabled placeholder="Set by PR Type">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold">Budget Department</label>
+                                            <input type="text" class="form-control form-control-sm" value="Engineering &amp; Maintenance" disabled>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label small fw-bold">Currency</label>
+                                            <input type="text" class="form-control form-control-sm" value="INR" disabled>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-end">
+                                            <div class="small text-muted">Each line picks its own Budget Reference ID — only budgets of the selected type that belong to your department are listed.</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="alert alert-danger small py-2 d-none" id="lineError"></div>
+
+                                    <div class="pr-grid-wrap" id="lineGridWrap">
+                                        <table class="table table-sm align-middle pr-grid hide-asset hide-qms" id="lineGrid">
+                                            <thead>
+                                                <tr>
+                                                    <th style="min-width:44px">#</th>
+                                                    <th style="min-width:150px">Material Group <span class="text-danger">*</span></th>
+                                                    <th style="min-width:190px">Material Code <span class="text-danger">*</span></th>
+                                                    <th style="min-width:230px">Description</th>
+                                                    <th style="min-width:80px">Qty <span class="text-danger">*</span></th>
+                                                    <th style="min-width:95px">UOM</th>
+                                                    <th style="min-width:160px">Purchase Type <span class="text-muted fw-normal">(auto)</span></th>
+                                                    <th style="min-width:130px">Approx. Price (₹) <span class="text-danger">*</span></th>
+                                                    <th style="min-width:85px">Per</th>
+                                                    <th style="min-width:140px">Total Value (₹) <span class="text-muted fw-normal">(approx.)</span></th>
+                                                    <th style="min-width:260px">Vendor <span class="text-muted fw-normal">(SAP)</span></th>
+                                                    <th style="min-width:150px">Budget Ref ID <span class="text-danger">*</span></th>
+                                                    <th style="min-width:230px">Internal Order No / SAP Budget No</th>
+                                                    <th style="min-width:160px">Balance Budget</th>
+                                                    <th style="min-width:170px">Storage Area <span class="text-muted fw-normal">(SAP)</span> <span class="text-danger">*</span></th>
+                                                    <th style="min-width:140px">Required By <span class="text-danger">*</span></th>
+                                                    <th style="min-width:190px">Utilizing / Usage Dept <span class="text-danger">*</span></th>
+                                                    <th class="col-asset" style="min-width:260px">Asset Code <span class="text-muted fw-normal">(SAP)</span> <span class="text-danger">*</span></th>
+                                                    <th class="col-qms" style="min-width:150px">QMS Reference <span class="text-danger">*</span></th>
+                                                    <th class="col-qms" style="min-width:170px">QMS Ref. No <span class="text-danger">*</span></th>
+                                                    <th style="min-width:210px">Line Checklist</th>
+                                                    <th class="sticky-r text-center" style="min-width:150px">Action</th>
+                                                </tr>
+                                            </thead>
+
+                                            <!-- ONE entry line: every field sits on a single row -->
+                                            <tbody id="entryBody">
+                                                <tr class="entry-row" id="entryRow">
+                                                    <td class="text-center text-muted pt-2"><i class="bi bi-plus-circle"></i></td>
+                                                    <td>
+                                                        <select class="form-select form-select-sm" id="itemGroup"><option value="">Select group</option></select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control form-control-sm" id="itemCode" autocomplete="off" disabled placeholder="Select group first">
+                                                    </td>
+                                                    <td><input type="text" class="form-control form-control-sm bg-light" id="itemDesc" readonly placeholder="Auto"></td>
+                                                    <td><input type="number" class="form-control form-control-sm" id="itemQty" min="1" value="1"></td>
+                                                    <td><input type="text" class="form-control form-control-sm bg-light" id="itemUom" readonly placeholder="Auto"></td>
+                                                    <td><div id="itemPurchaseType" class="pt-1"><span class="text-muted">—</span></div></td>
+                                                    <td><input type="number" class="form-control form-control-sm" id="itemPrice" min="0" step="0.01"></td>
+                                                    <td><input type="number" class="form-control form-control-sm" id="itemPer" min="1" value="1"></td>
+                                                    <td><input type="text" class="form-control form-control-sm bg-light fw-bold" id="itemTotal" readonly value="₹0.00"></td>
+                                                    <td><input type="text" class="form-control form-control-sm" id="itemVendor" autocomplete="off" placeholder="Type vendor name / code…"></td>
+                                                    <td><select class="form-select form-select-sm" id="itemBudgetRef"><option value="">Select PR type first</option></select></td>
+                                                    <td><input type="text" class="form-control form-control-sm bg-light" id="itemIntOrder" readonly placeholder="Auto"></td>
+                                                    <td><div class="ro-cell" id="itemBalance"><span class="text-muted">Auto</span></div></td>
+                                                    <td><select class="form-select form-select-sm" id="itemStorage"></select></td>
+                                                    <td><input type="date" class="form-control form-control-sm" id="itemDelivery"></td>
+                                                    <td><select class="form-select form-select-sm" id="itemUseDept"></select></td>
+                                                    <td class="col-asset"><select class="form-select form-select-sm" id="itemAssetCode"></select></td>
+                                                    <td class="col-qms"><select class="form-select form-select-sm" id="itemQmsType"></select></td>
+                                                    <td class="col-qms"><input type="text" class="form-control form-control-sm" id="itemQmsRef" disabled placeholder="Select type first"></td>
+                                                    <td>
+                                                        <select class="form-select form-select-sm" id="itemChecklist"></select>
+                                                        <div class="d-flex align-items-center gap-2 mt-1">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary" id="itemChecklistBtn" disabled><i class="bi bi-list-check me-1"></i>Execute</button>
+                                                            <span id="itemChecklistStatus"></span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="sticky-r text-center text-nowrap">
+                                                        <button class="btn btn-premium btn-sm px-3" type="button" id="addLineBtn"><i class="bi bi-plus-lg me-1"></i>Add</button>
+                                                        <button class="btn btn-light btn-sm" type="button" id="cancelEditBtn" style="display:none;">Cancel</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+
+                                            <!-- added lines -->
+                                            <tbody id="linesBody"></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="text-muted small py-2" id="emptyNote">No line items added yet. Fill the highlighted row above and click <strong>Add</strong>.</div>
+                                </div>
+
+                                <div class="alert alert-light border small mb-0" id="itemsLockedNote" style="display:flex;align-items:center;">
+                                    <i class="bi bi-lock-fill me-2 text-muted"></i>
+                                    <span id="itemsLockedText">Complete PR Type, Purchase Group, GxP Relevant and Classification in the Header Details tab to add line items.</span>
+                                </div>
+
+                            </div>
+
+                            <!-- ============ APPROVERS ============ -->
+                            <div class="tab-pane fade" id="approversTabPR">
+                                <div class="dcard">
+                                    <div class="section-tag-line">
+                                        <span class="section-label">Multi-level Approval Workflow</span>
+                                        <div class="section-hr"></div>
+                                    </div>
+
+                                    <div class="alert alert-light border small text-center py-4" id="approversEmpty">
+                                        Select <strong>GxP Relevant</strong> in PR Classification to determine the approval chain for this PR.
+                                    </div>
+
+                                    <div id="approversContent" style="display:none;">
+                                        <div class="alert alert-light border small mb-3" id="approversLevelNote"></div>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm align-middle mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:8%">Level</th>
+                                                        <th>Approver Role</th>
+                                                        <th>Approver</th>
+                                                        <th style="width:15%">Status</th>
+                                                        <th style="width:18%">Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="approversBody"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="alert alert-light border small mt-3 mb-0">
+                                            <i class="bi bi-info-circle me-2 text-primary"></i>
+                                            Approval levels are determined automatically based on Purchase Group, Request Value and GxP relevance. Once all levels approve, this PR is posted to SAP automatically as a purchase requisition.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ============ AUDIT LOGS ============ -->
+                            <div class="tab-pane fade" id="auditLogTabPR">
+                                <div class="dcard">
+                                    <div class="section-tag-line">
+                                        <span class="section-label">Audit Log</span>
+                                        <div class="section-hr"></div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:18%">Timestamp</th>
+                                                    <th style="width:18%">User</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-muted small">08 Sep 2026, 10:14 AM</td>
+                                                    <td>R. Venkatesh</td>
+                                                    <td>PR draft <span class="fw-bold">PR-2026-00842</span> created</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="alert alert-light border small mt-3 mb-0">
+                                        <i class="bi bi-info-circle me-2 text-primary"></i>
+                                        Further entries (checklists executed, line items added, submission, each approval, and SAP posting) are appended here automatically once this PR is saved.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <div class="small text-muted" id="footerLineCount">0 line items · Total ₹0.00</div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-outline-primary" id="saveDraftBtn">Save as Draft</button>
+                        <button type="button" class="btn btn-premium" id="saveSubmitBtn" disabled>
+                            Save and Submit <i class="bi bi-send-fill ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ CHECKLIST EXECUTION POP-UP (header + line items) ============ -->
+    <div class="modal fade" id="checklistExecModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header p-3">
+                    <div class="d-flex flex-column">
+                        <h5 class="modal-title fw-bold mb-0"><i class="bi bi-list-check me-2 text-primary"></i><span id="execTitle">Execute Checklist</span></h5>
+                        <span class="small text-muted" id="execSub"></span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="exec-by mb-3">
+                        <i class="bi bi-person-check me-1 text-primary"></i>
+                        Executed by <strong id="execBy"></strong> — the PR initiator (filled automatically)
+                    </div>
+                    <div class="alert alert-danger small py-2 d-none" id="execError"></div>
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead><tr id="execHead"></tr></thead>
+                            <tbody id="execBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-premium" id="execSaveBtn"><i class="bi bi-check2-circle me-1"></i>Save Checklist</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        /* Page-specific data for the MATERIAL request. Shared logic is in pr_common.js */
+        window.PR_CONFIG = {
+            kind: 'Material',
+            itemWord: 'Material',
+
+            // Classification: same list for Asset and Non-Asset
+            classification: (function () {
+                const list = ['IT', 'LC', 'Civil', 'Projects', 'Consumables', 'Spares & Change Parts'];
+                return { 'Asset': { options: list }, 'Non-Asset': { options: list } };
+            })(),
+
+            // Material master (mock "Unnati database") - searchable by code or description within a group
+            catalog: [
+                { group: 'Lab Equipments', code: 'MAT-1001', desc: 'HPLC Machine, Model XR-200', uom: 'Nos' },
+                { group: 'Lab Equipments', code: 'MAT-1004', desc: 'Analytical Balance, 220 g x 0.1 mg', uom: 'Nos' },
+                { group: 'Lab Equipments', code: 'MAT-1005', desc: 'Dissolution Test Apparatus, 8 Station', uom: 'Nos' },
+                { group: 'Machinery / Motor', code: 'MAT-1002', desc: '5 HP Centrifugal Pump Motor', uom: 'Nos' },
+                { group: 'Machinery / Motor', code: 'MAT-1006', desc: '3 HP Gear Motor, 1440 RPM', uom: 'Nos' },
+                { group: 'UPS System', code: 'MAT-1003', desc: 'UPS System – 10 KVA', uom: 'Nos' },
+                { group: 'Consumables', code: 'MAT-2001', desc: 'Lubricating Oil & Grease', uom: 'Litre' },
+                { group: 'Consumables', code: 'MAT-2005', desc: 'Nitrile Gloves, Medium (Box of 100)', uom: 'Box' },
+                { group: 'Consumables', code: 'MAT-2006', desc: 'A4 Copier Paper, 75 GSM', uom: 'Ream' },
+                { group: 'Spares & Change Part', code: 'MAT-2002', desc: 'Punches & Dies – Set B', uom: 'Set' },
+                { group: 'Spares & Change Part', code: 'MAT-2004', desc: 'Measuring Cups – 500 ml', uom: 'Nos' },
+                { group: 'Spares & Change Part', code: 'MAT-2007', desc: 'Tablet Press Punch Set – Round 8 mm', uom: 'Set' },
+                { group: 'Lab Chemicals', code: 'MAT-2003', desc: 'Acetonitrile, HPLC Grade', uom: 'Litre' },
+                { group: 'Lab Chemicals', code: 'MAT-2008', desc: 'Methanol, HPLC Grade', uom: 'Litre' }
+            ],
+
+            // Previous PRs per material. A code listed here = Repeat purchase (price + vendor come from it).
+            // A code not listed = First purchase (user enters the approximate price).
+            history: {
+                'MAT-1001': { pr: 'PR-2025-01187', date: '12 Nov 2025', price: 420000, per: 1, vendor: '100234' },
+                'MAT-1002': { pr: 'PR-2025-00921', date: '03 Sep 2025', price: 38500, per: 1, vendor: '101145' },
+                'MAT-2001': { pr: 'PR-2026-00310', date: '18 Mar 2026', price: 2450, per: 1, vendor: '101302' },
+                'MAT-2002': { pr: 'PR-2026-00456', date: '02 Apr 2026', price: 14800, per: 1, vendor: '101478' },
+                'MAT-2003': { pr: 'PR-2026-00588', date: '21 May 2026', price: 5200, per: 1, vendor: '100587' }
+            },
+
+            // Line-item checklists, by GxP. A task can be { task, photo:true } to allow capturing a photo.
+            lineChecklists: (function () {
+                const spares = ['Existing part condition assessed', { task: 'Capture photo of the existing part', photo: true }, 'Part number matches OEM / drawing'];
+                return {
+                    'No': {
+                        'Material Requirement Verification': ['Material code and description confirmed against material master',
+                            'Quantity justified against current stock / consumption', 'No duplicate open PR exists for the same material'],
+                        'Spares Replacement Verification': spares
+                    },
+                    'Yes': {
+                        'GxP Material Verification Checklist': ['Material grade / specification meets GxP requirement',
+                            'Approved (qualified) vendor confirmed for this material', 'QMS reference entered is valid for this line'],
+                        'Spares Replacement Verification': spares
+                    }
+                };
+            })()
+        };
+    </script>
+    <script src="pr_common.js"></script>
+    <script src="../sidebar.js"></script>
+    <script src="../header.js"></script>
+</body>
+
+</html>
